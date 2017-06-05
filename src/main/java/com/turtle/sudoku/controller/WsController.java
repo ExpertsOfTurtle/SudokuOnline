@@ -23,6 +23,6 @@ public class WsController {
     @RequestMapping("/wf" )
     public String hello4(){
          
-         return "com/turtle/demo/index";
+         return "sudoku/index";
    }
 }
