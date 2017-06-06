@@ -5,10 +5,13 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
-    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="BIGINT" />
+    <result column="end_time" property="endTime" jdbcType="BIGINT" />
     <result column="capacity" property="capacity" jdbcType="INTEGER" />
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="datetime" property="datetime" jdbcType="VARCHAR" />
   </resultMap>
 
  <sql id="Base_Column_List" >
@@ -16,9 +19,12 @@
    `creator`,
    `create_time`,
    `start_time`,
+   `end_time`,
    `capacity`,
    `title`,
-   `level`
+   `level`,
+   `status`,
+   `datetime`
  </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -39,18 +45,24 @@
      `creator`,
      `create_time`,
      `start_time`,
+     `end_time`,
      `capacity`,
      `title`,
-     `level`
+     `level`,
+     `status`,
+     `datetime`
     )
     values (
      #{id,jdbcType=INTEGER},
      #{creator,jdbcType=VARCHAR},
      #{createTime,jdbcType=VARCHAR},
-     #{startTime,jdbcType=VARCHAR},
+     #{startTime,jdbcType=BIGINT},
+     #{endTime,jdbcType=BIGINT},
      #{capacity,jdbcType=INTEGER},
      #{title,jdbcType=VARCHAR},
-     #{level,jdbcType=INTEGER}
+     #{level,jdbcType=INTEGER},
+     #{status,jdbcType=VARCHAR},
+     #{datetime,jdbcType=VARCHAR}
  )
   </insert>
   
@@ -71,6 +83,9 @@
       <if test="startTime != null" >
         `start_time`,
       </if>
+      <if test="endTime != null" >
+        `end_time`,
+      </if>
       <if test="capacity != null" >
         `capacity`,
       </if>
@@ -79,6 +94,12 @@
       </if>
       <if test="level != null" >
         `level`,
+      </if>
+      <if test="status != null" >
+        `status`,
+      </if>
+      <if test="datetime != null" >
+        `datetime`,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -92,7 +113,10 @@
         #{createTime,jdbcType=VARCHAR},
       </if>
       <if test="startTime != null" >
-        #{startTime,jdbcType=VARCHAR},
+        #{startTime,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=BIGINT},
       </if>
       <if test="capacity != null" >
         #{capacity,jdbcType=INTEGER},
@@ -102,6 +126,12 @@
       </if>
       <if test="level != null" >
         #{level,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="datetime != null" >
+        #{datetime,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -116,7 +146,10 @@
         `create_time`= #{createTime,jdbcType=VARCHAR},
        </if>
        <if test="startTime != null" >
-        `start_time`= #{startTime,jdbcType=VARCHAR},
+        `start_time`= #{startTime,jdbcType=BIGINT},
+       </if>
+       <if test="endTime != null" >
+        `end_time`= #{endTime,jdbcType=BIGINT},
        </if>
        <if test="capacity != null" >
         `capacity`= #{capacity,jdbcType=INTEGER},
@@ -127,6 +160,12 @@
        <if test="level != null" >
         `level`= #{level,jdbcType=INTEGER},
        </if>
+       <if test="status != null" >
+        `status`= #{status,jdbcType=VARCHAR},
+       </if>
+       <if test="datetime != null" >
+        `datetime`= #{datetime,jdbcType=VARCHAR},
+       </if>
           </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -136,10 +175,13 @@
     set 
        `creator` = #{creator,jdbcType=VARCHAR},
        `create_time` = #{createTime,jdbcType=VARCHAR},
-       `start_time` = #{startTime,jdbcType=VARCHAR},
+       `start_time` = #{startTime,jdbcType=BIGINT},
+       `end_time` = #{endTime,jdbcType=BIGINT},
        `capacity` = #{capacity,jdbcType=INTEGER},
        `title` = #{title,jdbcType=VARCHAR},
-       `level` = #{level,jdbcType=INTEGER}
+       `level` = #{level,jdbcType=INTEGER},
+       `status` = #{status,jdbcType=VARCHAR},
+       `datetime` = #{datetime,jdbcType=VARCHAR}
      where id = #{id,jdbcType=INTEGER}
   </update>
   
@@ -158,7 +200,10 @@
         and `create_time` = #{createTime,jdbcType=VARCHAR}
       </if>
             <if test="startTime != null" >
-        and `start_time` = #{startTime,jdbcType=VARCHAR}
+        and `start_time` = #{startTime,jdbcType=BIGINT}
+      </if>
+            <if test="endTime != null" >
+        and `end_time` = #{endTime,jdbcType=BIGINT}
       </if>
             <if test="capacity != null" >
         and `capacity` = #{capacity,jdbcType=INTEGER}
@@ -168,6 +213,12 @@
       </if>
             <if test="level != null" >
         and `level` = #{level,jdbcType=INTEGER}
+      </if>
+            <if test="status != null" >
+        and `status` = #{status,jdbcType=VARCHAR}
+      </if>
+            <if test="datetime != null" >
+        and `datetime` = #{datetime,jdbcType=VARCHAR}
       </if>
           </where>
   </select>
@@ -186,7 +237,10 @@
       and `create_time` = #{games.createTime,jdbcType=VARCHAR}
     </if>
         <if test="games.startTime != null" >
-      and `start_time` = #{games.startTime,jdbcType=VARCHAR}
+      and `start_time` = #{games.startTime,jdbcType=BIGINT}
+    </if>
+        <if test="games.endTime != null" >
+      and `end_time` = #{games.endTime,jdbcType=BIGINT}
     </if>
         <if test="games.capacity != null" >
       and `capacity` = #{games.capacity,jdbcType=INTEGER}
@@ -197,6 +251,12 @@
         <if test="games.level != null" >
       and `level` = #{games.level,jdbcType=INTEGER}
     </if>
+        <if test="games.status != null" >
+      and `status` = #{games.status,jdbcType=VARCHAR}
+    </if>
+        <if test="games.datetime != null" >
+      and `datetime` = #{games.datetime,jdbcType=VARCHAR}
+    </if>
         <if test="pageable.sort != null" >
       order by 
       <foreach collection="pageable.sort" item="order" separator="," >
@@ -205,9 +265,12 @@
    || order.property == 'creator'
    || order.property == 'create_time'
    || order.property == 'start_time'
+   || order.property == 'end_time'
    || order.property == 'capacity'
    || order.property == 'title'
    || order.property == 'level'
+   || order.property == 'status'
+   || order.property == 'datetime'
         " >
         		${order.property} ${order.direction}
         </if>

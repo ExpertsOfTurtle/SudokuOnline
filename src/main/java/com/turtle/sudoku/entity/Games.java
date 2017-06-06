@@ -8,10 +8,13 @@ public class Games{
 	private Integer id;
 	private String creator;
 	private String createTime;
-	private String startTime;
+	private Long startTime;
+	private Long endTime;
 	private Integer capacity;
 	private String title;
 	private Integer level;
+	private String status;
+	private String datetime;
 		
 	public void setId(Integer id){
 		this.id = id;
@@ -37,12 +40,20 @@ public class Games{
 		return this.createTime;
 	}
 		
-	public void setStartTime(String startTime){
+	public void setStartTime(Long startTime){
 		this.startTime = startTime;
 	}
 	
-	public String getStartTime(){
+	public Long getStartTime(){
 		return this.startTime;
+	}
+		
+	public void setEndTime(Long endTime){
+		this.endTime = endTime;
+	}
+	
+	public Long getEndTime(){
+		return this.endTime;
 	}
 		
 	public void setCapacity(Integer capacity){
@@ -67,6 +78,22 @@ public class Games{
 	
 	public Integer getLevel(){
 		return this.level;
+	}
+		
+	public void setStatus(String status){
+		this.status = status;
+	}
+	
+	public String getStatus(){
+		return this.status;
+	}
+		
+	public void setDatetime(String datetime){
+		this.datetime = datetime;
+	}
+	
+	public String getDatetime(){
+		return this.datetime;
 	}
 		
 		
