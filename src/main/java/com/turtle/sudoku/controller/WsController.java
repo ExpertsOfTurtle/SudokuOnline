@@ -7,10 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.turtle.sudoku.bean.RequestMessage;
 import com.turtle.sudoku.bean.ResponseMessage;
+import com.turtle.sudoku.bean.SocketRequest;
 
-/**
- * Created by sang on 16-12-22.
- */
 @Controller
 public class WsController {
     @MessageMapping("/welcome")
@@ -18,6 +16,13 @@ public class WsController {
     public ResponseMessage say(RequestMessage message) {
         System.out.println(message.getName() + "," + message.getMsg());
         return new ResponseMessage("welcome," + message.getName() + " !");
+    }
+    
+    @MessageMapping("/update")
+    @SendTo("/topic/getResponse")
+    public ResponseMessage update(SocketRequest request) {
+        System.out.println(request.getRequestType());
+        return new ResponseMessage("...." + request.getRequestType());
     }
     
     @RequestMapping("/wf" )

@@ -1,8 +1,5 @@
 package com.turtle.sudoku.bean;
 
-/**
- * Created by sang on 16-12-22.
- */
 public class ResponseMessage {
     private String responseMessage;
 

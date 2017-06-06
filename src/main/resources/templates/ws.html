@@ -2,9 +2,9 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Turtle WebSocket</title>
-    <script th:src="@{js/sockjs.min.js}"></script>
-    <script th:src="@{js/stomp.js}"></script>
-    <script th:src="@{js/jquery-3.1.1.js}"></script>
+    <script th:src="@{static/js/sockjs.min.js}"></script>
+    <script th:src="@{static/js/stomp.js}"></script>
+    <script th:src="@{static/js/jquery-3.1.1.js}"></script>
 </head>
 <body onload="disconnect()">
 <noscript><h2 style="color: #e80b0a;">Sorry，浏览器不支持WebSocket</h2></noscript>
@@ -17,6 +17,7 @@
     <div id="conversationDiv">
         <label>输入你的名字</label><input type="text" id="name"/>
         <button id="sendName" onclick="sendName();">发送</button>
+        <button id="update" onclick="update();">update</button>
         <p id="response"></p>
     </div>
 </div>
@@ -53,6 +54,12 @@
         console.log('name:' + name);
         var obj = {"name":name,"msg":"msg_" + name};
         stompClient.send("/welcome", {}, JSON.stringify(obj));
+    }
+    function update() {
+        var name = $('#name').val();
+        console.log('name:' + name);
+        var obj = {"requestType":"Lock", "name":name,"msg":"msg_" + name};
+        stompClient.send("/update", {}, JSON.stringify(obj));
     }
     function showResponse(message) {
         $("#response").html(message);
