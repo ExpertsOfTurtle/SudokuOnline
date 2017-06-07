@@ -4,7 +4,7 @@ public class CreateGameRequest {
 	private String username;
 	private Integer secondToStart;
 	private String title;
-	private String level;
+	private Integer level;
 	public String getUsername() {
 		return username;
 	}
@@ -23,11 +23,12 @@ public class CreateGameRequest {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getLevel() {
+	public Integer getLevel() {
 		return level;
 	}
-	public void setLevel(String level) {
+	public void setLevel(Integer level) {
 		this.level = level;
 	}
+	
 	
 }

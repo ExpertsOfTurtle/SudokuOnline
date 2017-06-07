@@ -1,6 +1,9 @@
 
 package com.turtle.sudoku.service;
 
+import java.util.List;
+
+import com.turtle.sudoku.entity.Games;
 import com.turtle.sudoku.model.GamesModel;
 
 public interface GamesService{
@@ -19,5 +22,7 @@ public interface GamesService{
 	
 
 	public int selectCount(GamesModel gamesModel);
+	
+	List<GamesModel> selectPendingGames(Long time);
 	
 }

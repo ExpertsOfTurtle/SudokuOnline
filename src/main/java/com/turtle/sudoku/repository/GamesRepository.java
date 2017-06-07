@@ -27,4 +27,5 @@ public interface GamesRepository{
 
     List<Games> selectPage(@Param("games") Games games, @Param("pageable") Pageable pageable);
 	
+    List<Games> selectPendingGames(Long time);
 }

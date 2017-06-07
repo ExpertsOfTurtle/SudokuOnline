@@ -1,6 +1,8 @@
 
 package com.turtle.sudoku.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -91,6 +93,13 @@ public class GamesServiceImpl implements GamesService {
 	@Override
 	public int selectCount(GamesModel gamesModel) {
 		return gamesRepo.selectCount(BeanCopyUtils.map(gamesModel, Games.class));
+	}
+
+
+	@Override
+	public List<GamesModel> selectPendingGames(Long time) {
+		List<Games> list = gamesRepo.selectPendingGames(time);
+		return BeanCopyUtils.mapList(list, GamesModel.class);
 	}
 
 
