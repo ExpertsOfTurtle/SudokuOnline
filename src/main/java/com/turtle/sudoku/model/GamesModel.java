@@ -5,7 +5,7 @@ public class GamesModel implements Serializable{
 	
 	private Integer id;
 	private String creator;
-	private String createTime;
+	private Long createTime;
 	private Long startTime;
 	private Long endTime;
 	private Integer capacity;
@@ -30,11 +30,11 @@ public class GamesModel implements Serializable{
 		return this.creator;
 	}
 		
-	public void setCreateTime(String createTime){
+	public void setCreateTime(Long createTime){
 		this.createTime = createTime;
 	}
 	
-	public String getCreateTime(){
+	public Long getCreateTime(){
 		return this.createTime;
 	}
 		

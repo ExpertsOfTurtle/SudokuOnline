@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.turtle.sudoku.entity.Games" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="BIGINT" />
     <result column="start_time" property="startTime" jdbcType="BIGINT" />
     <result column="end_time" property="endTime" jdbcType="BIGINT" />
     <result column="capacity" property="capacity" jdbcType="INTEGER" />
@@ -55,7 +55,7 @@
     values (
      #{id,jdbcType=INTEGER},
      #{creator,jdbcType=VARCHAR},
-     #{createTime,jdbcType=VARCHAR},
+     #{createTime,jdbcType=BIGINT},
      #{startTime,jdbcType=BIGINT},
      #{endTime,jdbcType=BIGINT},
      #{capacity,jdbcType=INTEGER},
@@ -110,7 +110,7 @@
         #{creator,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
-        #{createTime,jdbcType=VARCHAR},
+        #{createTime,jdbcType=BIGINT},
       </if>
       <if test="startTime != null" >
         #{startTime,jdbcType=BIGINT},
@@ -143,7 +143,7 @@
         `creator`= #{creator,jdbcType=VARCHAR},
        </if>
        <if test="createTime != null" >
-        `create_time`= #{createTime,jdbcType=VARCHAR},
+        `create_time`= #{createTime,jdbcType=BIGINT},
        </if>
        <if test="startTime != null" >
         `start_time`= #{startTime,jdbcType=BIGINT},
@@ -174,7 +174,7 @@
     update games
     set 
        `creator` = #{creator,jdbcType=VARCHAR},
-       `create_time` = #{createTime,jdbcType=VARCHAR},
+       `create_time` = #{createTime,jdbcType=BIGINT},
        `start_time` = #{startTime,jdbcType=BIGINT},
        `end_time` = #{endTime,jdbcType=BIGINT},
        `capacity` = #{capacity,jdbcType=INTEGER},
@@ -197,7 +197,7 @@
         and `creator` = #{creator,jdbcType=VARCHAR}
       </if>
             <if test="createTime != null" >
-        and `create_time` = #{createTime,jdbcType=VARCHAR}
+        and `create_time` = #{createTime,jdbcType=BIGINT}
       </if>
             <if test="startTime != null" >
         and `start_time` = #{startTime,jdbcType=BIGINT}
@@ -234,7 +234,7 @@
       and `creator` = #{games.creator,jdbcType=VARCHAR}
     </if>
         <if test="games.createTime != null" >
-      and `create_time` = #{games.createTime,jdbcType=VARCHAR}
+      and `create_time` = #{games.createTime,jdbcType=BIGINT}
     </if>
         <if test="games.startTime != null" >
       and `start_time` = #{games.startTime,jdbcType=BIGINT}
