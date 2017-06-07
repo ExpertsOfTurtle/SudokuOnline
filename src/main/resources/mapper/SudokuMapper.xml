@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.turtle.sudoku.entity.Sudoku" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="problem" property="problem" jdbcType="VARCHAR" />
-    <result column="level" property="level" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="INTEGER" />
   </resultMap>
 
  <sql id="Base_Column_List" >
@@ -34,7 +34,7 @@
     values (
      #{id,jdbcType=INTEGER},
      #{problem,jdbcType=VARCHAR},
-     #{level,jdbcType=VARCHAR}
+     #{level,jdbcType=INTEGER}
  )
   </insert>
   
@@ -61,7 +61,7 @@
         #{problem,jdbcType=VARCHAR},
       </if>
       <if test="level != null" >
-        #{level,jdbcType=VARCHAR},
+        #{level,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -73,7 +73,7 @@
         `problem`= #{problem,jdbcType=VARCHAR},
        </if>
        <if test="level != null" >
-        `level`= #{level,jdbcType=VARCHAR},
+        `level`= #{level,jdbcType=INTEGER},
        </if>
           </set>
     where id = #{id,jdbcType=INTEGER}
@@ -83,7 +83,7 @@
     update sudoku
     set 
        `problem` = #{problem,jdbcType=VARCHAR},
-       `level` = #{level,jdbcType=VARCHAR}
+       `level` = #{level,jdbcType=INTEGER}
      where id = #{id,jdbcType=INTEGER}
   </update>
   
@@ -99,7 +99,7 @@
         and `problem` = #{problem,jdbcType=VARCHAR}
       </if>
             <if test="level != null" >
-        and `level` = #{level,jdbcType=VARCHAR}
+        and `level` = #{level,jdbcType=INTEGER}
       </if>
           </where>
   </select>
@@ -115,7 +115,7 @@
       and `problem` = #{sudoku.problem,jdbcType=VARCHAR}
     </if>
         <if test="sudoku.level != null" >
-      and `level` = #{sudoku.level,jdbcType=VARCHAR}
+      and `level` = #{sudoku.level,jdbcType=INTEGER}
     </if>
         <if test="pageable.sort != null" >
       order by 
