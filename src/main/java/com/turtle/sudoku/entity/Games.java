@@ -1,11 +1,10 @@
 package com.turtle.sudoku.entity;
 
-
 public class Games{
 	
 	private Integer id;
 	private String creator;
-	private String createTime;
+	private Long createTime;
 	private Long startTime;
 	private Long endTime;
 	private Integer capacity;
@@ -13,6 +12,7 @@ public class Games{
 	private Integer level;
 	private String status;
 	private String datetime;
+	private Integer problemid;
 		
 	public void setId(Integer id){
 		this.id = id;
@@ -30,11 +30,11 @@ public class Games{
 		return this.creator;
 	}
 		
-	public void setCreateTime(String createTime){
+	public void setCreateTime(Long createTime){
 		this.createTime = createTime;
 	}
 	
-	public String getCreateTime(){
+	public Long getCreateTime(){
 		return this.createTime;
 	}
 		
@@ -92,6 +92,14 @@ public class Games{
 	
 	public String getDatetime(){
 		return this.datetime;
+	}
+		
+	public void setProblemid(Integer problemid){
+		this.problemid = problemid;
+	}
+	
+	public Integer getProblemid(){
+		return this.problemid;
 	}
 		
 		

@@ -1,10 +1,11 @@
 package com.turtle.sudoku.entity;
 
+
 public class Sudoku{
 	
 	private Integer id;
 	private String problem;
-	private String level;
+	private Integer level;
 		
 	public void setId(Integer id){
 		this.id = id;
@@ -22,11 +23,11 @@ public class Sudoku{
 		return this.problem;
 	}
 		
-	public void setLevel(String level){
+	public void setLevel(Integer level){
 		this.level = level;
 	}
 	
-	public String getLevel(){
+	public Integer getLevel(){
 		return this.level;
 	}
 		
