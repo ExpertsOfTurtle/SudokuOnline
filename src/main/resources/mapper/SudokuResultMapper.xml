@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.turtle.sudoku.repository.SudokuResultRepository" >
+  <resultMap id="BaseResultMap" type="com.turtle.sudoku.entity.SudokuResult" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="usetime" property="usetime" jdbcType="INTEGER" />
+    <result column="gameid" property="gameid" jdbcType="INTEGER" />
+    <result column="rank" property="rank" jdbcType="INTEGER" />
+    <result column="timestamp" property="timestamp" jdbcType="BIGINT" />
+    <result column="datetime" property="datetime" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="details" property="details" jdbcType="LONGVARCHAR" />
+  </resultMap>
+
+ <sql id="Base_Column_List" >
+   `id`,
+   `username`,
+   `usetime`,
+   `gameid`,
+   `rank`,
+   `timestamp`,
+   `datetime`,
+   `level`,
+   `details`
+ </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sudoku_result
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sudoku_result
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.turtle.sudoku.entity.SudokuResult" >
+    insert into sudoku_result ( 
+     `id`,
+     `username`,
+     `usetime`,
+     `gameid`,
+     `rank`,
+     `timestamp`,
+     `datetime`,
+     `level`,
+     `details`
+    )
+    values (
+     #{id,jdbcType=INTEGER},
+     #{username,jdbcType=VARCHAR},
+     #{usetime,jdbcType=INTEGER},
+     #{gameid,jdbcType=INTEGER},
+     #{rank,jdbcType=INTEGER},
+     #{timestamp,jdbcType=BIGINT},
+     #{datetime,jdbcType=VARCHAR},
+     #{level,jdbcType=INTEGER},
+     #{details,jdbcType=LONGVARCHAR}
+ )
+  </insert>
+  
+  
+  
+  <insert id="insertSelective" parameterType="com.turtle.sudoku.entity.SudokuResult" >
+    insert into sudoku_result
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        `id`,
+      </if>
+      <if test="username != null" >
+        `username`,
+      </if>
+      <if test="usetime != null" >
+        `usetime`,
+      </if>
+      <if test="gameid != null" >
+        `gameid`,
+      </if>
+      <if test="rank != null" >
+        `rank`,
+      </if>
+      <if test="timestamp != null" >
+        `timestamp`,
+      </if>
+      <if test="datetime != null" >
+        `datetime`,
+      </if>
+      <if test="level != null" >
+        `level`,
+      </if>
+      <if test="details != null" >
+        `details`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="usetime != null" >
+        #{usetime,jdbcType=INTEGER},
+      </if>
+      <if test="gameid != null" >
+        #{gameid,jdbcType=INTEGER},
+      </if>
+      <if test="rank != null" >
+        #{rank,jdbcType=INTEGER},
+      </if>
+      <if test="timestamp != null" >
+        #{timestamp,jdbcType=BIGINT},
+      </if>
+      <if test="datetime != null" >
+        #{datetime,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="details != null" >
+        #{details,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.turtle.sudoku.entity.SudokuResult" >
+    update sudoku_result
+	  <set>
+       <if test="username != null" >
+        `username`= #{username,jdbcType=VARCHAR},
+       </if>
+       <if test="usetime != null" >
+        `usetime`= #{usetime,jdbcType=INTEGER},
+       </if>
+       <if test="gameid != null" >
+        `gameid`= #{gameid,jdbcType=INTEGER},
+       </if>
+       <if test="rank != null" >
+        `rank`= #{rank,jdbcType=INTEGER},
+       </if>
+       <if test="timestamp != null" >
+        `timestamp`= #{timestamp,jdbcType=BIGINT},
+       </if>
+       <if test="datetime != null" >
+        `datetime`= #{datetime,jdbcType=VARCHAR},
+       </if>
+       <if test="level != null" >
+        `level`= #{level,jdbcType=INTEGER},
+       </if>
+           <if test="details != null" >
+        `details`= #{details,jdbcType=LONGVARCHAR},
+       </if>
+      </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.turtle.sudoku.entity.SudokuResult" >
+    update sudoku_result
+    set 
+   `details` = #{details,jdbcType=LONGVARCHAR},
+       `username` = #{username,jdbcType=VARCHAR},
+       `usetime` = #{usetime,jdbcType=INTEGER},
+       `gameid` = #{gameid,jdbcType=INTEGER},
+       `rank` = #{rank,jdbcType=INTEGER},
+       `timestamp` = #{timestamp,jdbcType=BIGINT},
+       `datetime` = #{datetime,jdbcType=VARCHAR},
+       `level` = #{level,jdbcType=INTEGER}
+     where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+
+  
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="com.turtle.sudoku.entity.SudokuResult" >
+    select count(*) from sudoku_result
+    <where >
+            <if test="id != null" >
+        and `id` = #{id,jdbcType=INTEGER}
+      </if>
+            <if test="username != null" >
+        and `username` = #{username,jdbcType=VARCHAR}
+      </if>
+            <if test="usetime != null" >
+        and `usetime` = #{usetime,jdbcType=INTEGER}
+      </if>
+            <if test="gameid != null" >
+        and `gameid` = #{gameid,jdbcType=INTEGER}
+      </if>
+            <if test="rank != null" >
+        and `rank` = #{rank,jdbcType=INTEGER}
+      </if>
+            <if test="timestamp != null" >
+        and `timestamp` = #{timestamp,jdbcType=BIGINT}
+      </if>
+            <if test="datetime != null" >
+        and `datetime` = #{datetime,jdbcType=VARCHAR}
+      </if>
+            <if test="level != null" >
+        and `level` = #{level,jdbcType=INTEGER}
+      </if>
+            <if test="details != null" >
+        and `details` = #{details,jdbcType=LONGVARCHAR}
+      </if>
+          </where>
+  </select>
+
+    <select id="selectPage" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from sudoku_result where 1 = 1 
+        <if test="sudokuResult.id != null" >
+      and `id` = #{sudokuResult.id,jdbcType=INTEGER}
+    </if>
+        <if test="sudokuResult.username != null" >
+      and `username` = #{sudokuResult.username,jdbcType=VARCHAR}
+    </if>
+        <if test="sudokuResult.usetime != null" >
+      and `usetime` = #{sudokuResult.usetime,jdbcType=INTEGER}
+    </if>
+        <if test="sudokuResult.gameid != null" >
+      and `gameid` = #{sudokuResult.gameid,jdbcType=INTEGER}
+    </if>
+        <if test="sudokuResult.rank != null" >
+      and `rank` = #{sudokuResult.rank,jdbcType=INTEGER}
+    </if>
+        <if test="sudokuResult.timestamp != null" >
+      and `timestamp` = #{sudokuResult.timestamp,jdbcType=BIGINT}
+    </if>
+        <if test="sudokuResult.datetime != null" >
+      and `datetime` = #{sudokuResult.datetime,jdbcType=VARCHAR}
+    </if>
+        <if test="sudokuResult.level != null" >
+      and `level` = #{sudokuResult.level,jdbcType=INTEGER}
+    </if>
+        <if test="sudokuResult.details != null" >
+      and `details` = #{sudokuResult.details,jdbcType=LONGVARCHAR}
+    </if>
+        <if test="pageable.sort != null" >
+      order by 
+      <foreach collection="pageable.sort" item="order" separator="," >
+        <if test="
+   order.property == 'id' 
+   || order.property == 'username'
+   || order.property == 'usetime'
+   || order.property == 'gameid'
+   || order.property == 'rank'
+   || order.property == 'timestamp'
+   || order.property == 'datetime'
+   || order.property == 'level'
+   || order.property == 'details'
+        " >
+        		${order.property} ${order.direction}
+        </if>
+      </foreach>
+    </if>
+    <if test="pageable.offset >= 0 and pageable.pageSize > 0" >
+      limit ${pageable.offset}, ${pageable.pageSize}
+    </if>
+  </select>
+ </mapper>
+  
+
+  
+	
