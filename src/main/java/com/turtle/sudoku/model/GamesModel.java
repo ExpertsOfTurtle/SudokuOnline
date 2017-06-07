@@ -13,6 +13,7 @@ public class GamesModel implements Serializable{
 	private Integer level;
 	private String status;
 	private String datetime;
+	private Integer problemid;
 		
 	public void setId(Integer id){
 		this.id = id;
@@ -92,6 +93,14 @@ public class GamesModel implements Serializable{
 	
 	public String getDatetime(){
 		return this.datetime;
+	}
+		
+	public void setProblemid(Integer problemid){
+		this.problemid = problemid;
+	}
+	
+	public Integer getProblemid(){
+		return this.problemid;
 	}
 		
 		
