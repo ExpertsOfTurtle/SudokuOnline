@@ -1,8 +1,6 @@
 package com.turtle.sudoku.entity;
 
-import com.vip.venus.core.beans.mapping.annotation.MapClass;
 
-@MapClass(value="com.turtle.sudoku.model.GamesModel")
 public class Games{
 	
 	private Integer id;

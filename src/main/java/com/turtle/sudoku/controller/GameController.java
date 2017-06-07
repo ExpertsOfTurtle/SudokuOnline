@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.turtle.sudoku.bean.CreateGameRequest;
 import com.turtle.sudoku.model.SudokuModel;
 import com.turtle.sudoku.service.SudokuService;
 
@@ -32,4 +33,14 @@ public class GameController {
 		
 		return ResponseEntity.ok(sudokuModel);
 	}
+	
+	@RequestMapping(value="/create")
+	public ResponseEntity<?> createGame(@RequestBody CreateGameRequest request) {
+		logger.debug("[{}] create a game of leve [{}]", request.getUsername(), request.getLevel());
+		
+		return ResponseEntity.ok("");
+	}
+	
+	
+	
 }

@@ -9,13 +9,12 @@ import com.turtle.sudoku.entity.Games;
 import com.turtle.sudoku.repository.GamesRepository;
 import com.turtle.sudoku.model.GamesModel;
 import com.turtle.sudoku.service.GamesService;
-import com.vip.venus.core.beans.mapping.BeanMapper;
+import com.turtle.sudoku.util.BeanCopyUtils;
+
 
 @Service
 public class GamesServiceImpl implements GamesService {
 
-	@Autowired
-	private BeanMapper beanMapper;
 
 	@Autowired
 	private GamesRepository gamesRepo;
@@ -40,7 +39,7 @@ public class GamesServiceImpl implements GamesService {
 	@Override
 	public GamesModel findByPrimaryKey(Integer id) {
 		Games games = gamesRepo.selectByPrimaryKey(id);
-		return beanMapper.map(games, GamesModel.class);
+		return BeanCopyUtils.map(games, GamesModel.class);
 	}
 	
 	/*
@@ -50,7 +49,7 @@ public class GamesServiceImpl implements GamesService {
 	 */
 	@Override
 	public int updateByPrimaryKey(GamesModel gamesModel) {
-		return gamesRepo.updateByPrimaryKey(beanMapper.map(gamesModel, Games.class));
+		return gamesRepo.updateByPrimaryKey(BeanCopyUtils.map(gamesModel, Games.class));
 	}
 	
 	/*
@@ -60,7 +59,7 @@ public class GamesServiceImpl implements GamesService {
 	 */
 	@Override
 	public int updateByPrimaryKeySelective(GamesModel gamesModel) {
-		return gamesRepo.updateByPrimaryKeySelective(beanMapper.map(gamesModel, Games.class));
+		return gamesRepo.updateByPrimaryKeySelective(BeanCopyUtils.map(gamesModel, Games.class));
 	}
 	
 
@@ -71,7 +70,7 @@ public class GamesServiceImpl implements GamesService {
 	 */
 	@Override
 	public int create(GamesModel gamesModel) {
-		return gamesRepo.insert(beanMapper.map(gamesModel, Games.class));
+		return gamesRepo.insert(BeanCopyUtils.map(gamesModel, Games.class));
 	}
 
 	/*
@@ -81,7 +80,7 @@ public class GamesServiceImpl implements GamesService {
 	 */
 	@Override
 	public int createSelective(GamesModel gamesModel) {
-		return gamesRepo.insertSelective(beanMapper.map(gamesModel, Games.class));
+		return gamesRepo.insertSelective(BeanCopyUtils.map(gamesModel, Games.class));
 	}
 
 	/*
@@ -91,7 +90,7 @@ public class GamesServiceImpl implements GamesService {
 	 */
 	@Override
 	public int selectCount(GamesModel gamesModel) {
-		return gamesRepo.selectCount(beanMapper.map(gamesModel, Games.class));
+		return gamesRepo.selectCount(BeanCopyUtils.map(gamesModel, Games.class));
 	}
 
 
