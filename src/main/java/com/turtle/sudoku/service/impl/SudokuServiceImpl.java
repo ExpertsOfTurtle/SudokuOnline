@@ -1,6 +1,8 @@
 
 package com.turtle.sudoku.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -89,6 +91,13 @@ public class SudokuServiceImpl implements SudokuService {
 	@Override
 	public int selectCount(SudokuModel sudokuModel) {
 		return sudokuRepo.selectCount(BeanCopyUtils.map(sudokuModel, Sudoku.class));
+	}
+
+
+	@Override
+	public List<SudokuModel> selectByLevel(Integer level) {
+		List<Sudoku> list = sudokuRepo.selectByLevel(level);
+		return BeanCopyUtils.mapList(list, SudokuModel.class);
 	}
 
 

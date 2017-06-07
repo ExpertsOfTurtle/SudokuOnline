@@ -1,8 +1,5 @@
 package com.turtle.sudoku.entity;
 
-import com.vip.venus.core.beans.mapping.annotation.MapClass;
-
-@MapClass(value="com.turtle.sudoku.model.SudokuResultModel")
 public class SudokuResult{
 	
 	private Integer id;

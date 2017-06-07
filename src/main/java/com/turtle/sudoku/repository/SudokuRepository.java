@@ -27,4 +27,5 @@ public interface SudokuRepository{
 
     List<Sudoku> selectPage(@Param("sudoku") Sudoku sudoku, @Param("pageable") Pageable pageable);
 	
+    List<Sudoku> selectByLevel(Integer level);
 }

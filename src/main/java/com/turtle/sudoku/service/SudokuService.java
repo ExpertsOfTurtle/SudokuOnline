@@ -1,6 +1,9 @@
 
 package com.turtle.sudoku.service;
 
+import java.util.List;
+
+import com.turtle.sudoku.entity.Sudoku;
 import com.turtle.sudoku.model.SudokuModel;
 
 public interface SudokuService{
@@ -19,5 +22,6 @@ public interface SudokuService{
 	
 
 	public int selectCount(SudokuModel sudokuModel);
-	
+
+	public List<SudokuModel> selectByLevel(Integer level);
 }

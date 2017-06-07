@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turtle.sudoku.bean.CreateGameRequest;
 import com.turtle.sudoku.bean.ErrorResponse;
+import com.turtle.sudoku.exception.SudokuException;
 import com.turtle.sudoku.exception.ValidationException;
 import com.turtle.sudoku.model.GamesModel;
 import com.turtle.sudoku.model.SudokuModel;
@@ -49,11 +50,18 @@ public class GameController {
 	public ResponseEntity<?> createGame(@RequestBody CreateGameRequest request) {
 		logger.debug("[{}] create a game of leve [{}]", request.getUsername(), request.getLevel());
 		
+		int problemId = 0;
 		try {
 			validateUsername(request.getUsername());
 			validateLevel(request.getLevel());
 			validateSecondToStart(request.getSecondToStart());
+			problemId = getRandomProblem(request.getLevel());
 		} catch (ValidationException e) {
+			ErrorResponse er = new ErrorResponse();
+			er.setErrorCode(e.getCode());
+			er.setMessage(e.getMessage());
+			return ResponseEntity.ok(er);
+		} catch (SudokuException e) {
 			ErrorResponse er = new ErrorResponse();
 			er.setErrorCode(e.getCode());
 			er.setMessage(e.getMessage());
@@ -66,9 +74,10 @@ public class GameController {
 		gm.setLevel(request.getLevel());
 		gm.setTitle(request.getTitle());		
 		gm.setCreateTime(createTime);
-		gm.setStartTime(createTime + request.getSecondToStart());
+		gm.setStartTime(createTime + request.getSecondToStart() * 1000);
 		gm.setDatetime(DateUtil.format(createTime, "yyyy-MM-dd HH:mm:ss"));
-		gm.setStatus("PENDING");
+		gm.setStatus("W");
+		gm.setProblemid(problemId);
 		int rt = gameService.create(gm);
 		gm.setId(rt);
 		
@@ -85,13 +94,51 @@ public class GameController {
 		return ResponseEntity.ok(list);
 	}
 	
-	@RequestMapping(value="/getProblem")
-	public ResponseEntity<?> getProblem() {
-		long time = System.currentTimeMillis();
-		List<GamesModel> list = gameService.selectPendingGames(time);
-		return ResponseEntity.ok(list);
+	/*
+	 * 根据题目Id获取题目数据
+	 * */
+	@RequestMapping(value="/getProblem/{problemId}")
+	public ResponseEntity<?> getProblem(@PathVariable("problemId")Integer problemId) {
+		SudokuModel sudoku = sudokuService.findByPrimaryKey(problemId);
+		return ResponseEntity.ok(sudoku);
 	}
 	
+	/*
+	 * 根据gameId，先查找题目Id，然后获取题目数据
+	 * */
+	@RequestMapping(value="/getProblem/gameId/{gameId}")
+	public ResponseEntity<?> getProblemByGameId(@PathVariable("gameId")Integer gameId) {
+		GamesModel game = gameService.findByPrimaryKey(gameId);
+		if (game == null || game.getId() == null) {
+			ErrorResponse er = new ErrorResponse();
+			er.setErrorCode("");
+			er.setMessage("No such game");
+			return ResponseEntity.ok(er);	
+		}
+		Integer problemId = game.getId();
+		SudokuModel sudoku = sudokuService.findByPrimaryKey(problemId);
+		if (sudoku == null) {
+			ErrorResponse er = new ErrorResponse();
+			er.setErrorCode("");
+			er.setMessage("No such problem");
+			return ResponseEntity.ok(er);
+		}
+		return ResponseEntity.ok(sudoku);
+	}
+	
+	/*
+	 * 根据Level从数据库查找所有题目，然后随机抽
+	 * */
+	private Integer getRandomProblem(Integer level) throws SudokuException {
+		List<SudokuModel> list = sudokuService.selectByLevel(level);
+		if (list == null || list.size() == 0) {
+			throw new SudokuException("", "No problem of such level");
+		}
+		int n = list.size();
+		int x = (int)(Math.random() * n * 2) % n;
+		SudokuModel sudoku = list.get(x);
+		return sudoku.getId();
+	}
 	private boolean validateUsername(String username) throws ValidationException {
 		if ("could".equalsIgnoreCase(username) || "dfs".equalsIgnoreCase(username)) {
 			return true;
@@ -103,7 +150,7 @@ public class GameController {
 		if (level == null) {
 			throw new ValidationException("", "Level is null");
 		}
-		if (level < 11 || level > 19) {
+		if (level <= 0 || level >= 20) {
 			throw new ValidationException("", "No such level");
 		}
 		return true;

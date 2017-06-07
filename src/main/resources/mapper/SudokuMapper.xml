@@ -133,6 +133,12 @@
       limit ${pageable.offset}, ${pageable.pageSize}
     </if>
   </select>
+  <select id="selectByLevel" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sudoku
+    where level = #{level,jdbcType=INTEGER}
+  </select>
  </mapper>
   
 

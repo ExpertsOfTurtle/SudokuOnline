@@ -9,13 +9,10 @@ import com.turtle.sudoku.entity.SudokuResult;
 import com.turtle.sudoku.repository.SudokuResultRepository;
 import com.turtle.sudoku.model.SudokuResultModel;
 import com.turtle.sudoku.service.SudokuResultService;
-import com.vip.venus.core.beans.mapping.BeanMapper;
+import com.turtle.sudoku.util.BeanCopyUtils;
 
 @Service
 public class SudokuResultServiceImpl implements SudokuResultService {
-
-	@Autowired
-	private BeanMapper beanMapper;
 
 	@Autowired
 	private SudokuResultRepository sudokuResultRepo;
@@ -40,7 +37,7 @@ public class SudokuResultServiceImpl implements SudokuResultService {
 	@Override
 	public SudokuResultModel findByPrimaryKey(Integer id) {
 		SudokuResult sudokuResult = sudokuResultRepo.selectByPrimaryKey(id);
-		return beanMapper.map(sudokuResult, SudokuResultModel.class);
+		return BeanCopyUtils.map(sudokuResult, SudokuResultModel.class);
 	}
 	
 	/*
@@ -50,7 +47,7 @@ public class SudokuResultServiceImpl implements SudokuResultService {
 	 */
 	@Override
 	public int updateByPrimaryKey(SudokuResultModel sudokuResultModel) {
-		return sudokuResultRepo.updateByPrimaryKey(beanMapper.map(sudokuResultModel, SudokuResult.class));
+		return sudokuResultRepo.updateByPrimaryKey(BeanCopyUtils.map(sudokuResultModel, SudokuResult.class));
 	}
 	
 	/*
@@ -60,7 +57,7 @@ public class SudokuResultServiceImpl implements SudokuResultService {
 	 */
 	@Override
 	public int updateByPrimaryKeySelective(SudokuResultModel sudokuResultModel) {
-		return sudokuResultRepo.updateByPrimaryKeySelective(beanMapper.map(sudokuResultModel, SudokuResult.class));
+		return sudokuResultRepo.updateByPrimaryKeySelective(BeanCopyUtils.map(sudokuResultModel, SudokuResult.class));
 	}
 	
 
@@ -71,7 +68,7 @@ public class SudokuResultServiceImpl implements SudokuResultService {
 	 */
 	@Override
 	public int create(SudokuResultModel sudokuResultModel) {
-		return sudokuResultRepo.insert(beanMapper.map(sudokuResultModel, SudokuResult.class));
+		return sudokuResultRepo.insert(BeanCopyUtils.map(sudokuResultModel, SudokuResult.class));
 	}
 
 	/*
@@ -81,7 +78,7 @@ public class SudokuResultServiceImpl implements SudokuResultService {
 	 */
 	@Override
 	public int createSelective(SudokuResultModel sudokuResultModel) {
-		return sudokuResultRepo.insertSelective(beanMapper.map(sudokuResultModel, SudokuResult.class));
+		return sudokuResultRepo.insertSelective(BeanCopyUtils.map(sudokuResultModel, SudokuResult.class));
 	}
 
 	/*
@@ -91,7 +88,7 @@ public class SudokuResultServiceImpl implements SudokuResultService {
 	 */
 	@Override
 	public int selectCount(SudokuResultModel sudokuResultModel) {
-		return sudokuResultRepo.selectCount(beanMapper.map(sudokuResultModel, SudokuResult.class));
+		return sudokuResultRepo.selectCount(BeanCopyUtils.map(sudokuResultModel, SudokuResult.class));
 	}
 
 
