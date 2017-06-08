@@ -10,6 +10,7 @@ public class SudokuResult{
 	private Long timestamp;
 	private String datetime;
 	private Integer level;
+	private String gameMode;
 	private String details;
 		
 	public void setId(Integer id){
@@ -74,6 +75,14 @@ public class SudokuResult{
 	
 	public Integer getLevel(){
 		return this.level;
+	}
+		
+	public void setGameMode(String gameMode){
+		this.gameMode = gameMode;
+	}
+	
+	public String getGameMode(){
+		return this.gameMode;
 	}
 		
 	public void setDetails(String details){

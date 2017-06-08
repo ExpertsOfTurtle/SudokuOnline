@@ -10,6 +10,7 @@
     <result column="timestamp" property="timestamp" jdbcType="BIGINT" />
     <result column="datetime" property="datetime" jdbcType="VARCHAR" />
     <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="game_mode" property="gameMode" jdbcType="VARCHAR" />
     <result column="details" property="details" jdbcType="LONGVARCHAR" />
   </resultMap>
 
@@ -22,6 +23,7 @@
    `timestamp`,
    `datetime`,
    `level`,
+   `game_mode`,
    `details`
  </sql>
   
@@ -47,6 +49,7 @@
      `timestamp`,
      `datetime`,
      `level`,
+     `game_mode`,
      `details`
     )
     values (
@@ -58,6 +61,7 @@
      #{timestamp,jdbcType=BIGINT},
      #{datetime,jdbcType=VARCHAR},
      #{level,jdbcType=INTEGER},
+     #{gameMode,jdbcType=VARCHAR},
      #{details,jdbcType=LONGVARCHAR}
  )
   </insert>
@@ -91,6 +95,9 @@
       <if test="level != null" >
         `level`,
       </if>
+      <if test="gameMode != null" >
+        `game_mode`,
+      </if>
       <if test="details != null" >
         `details`,
       </if>
@@ -119,6 +126,9 @@
       </if>
       <if test="level != null" >
         #{level,jdbcType=INTEGER},
+      </if>
+      <if test="gameMode != null" >
+        #{gameMode,jdbcType=VARCHAR},
       </if>
       <if test="details != null" >
         #{details,jdbcType=LONGVARCHAR},
@@ -150,6 +160,9 @@
        <if test="level != null" >
         `level`= #{level,jdbcType=INTEGER},
        </if>
+       <if test="gameMode != null" >
+        `game_mode`= #{gameMode,jdbcType=VARCHAR},
+       </if>
            <if test="details != null" >
         `details`= #{details,jdbcType=LONGVARCHAR},
        </if>
@@ -167,7 +180,8 @@
        `rank` = #{rank,jdbcType=INTEGER},
        `timestamp` = #{timestamp,jdbcType=BIGINT},
        `datetime` = #{datetime,jdbcType=VARCHAR},
-       `level` = #{level,jdbcType=INTEGER}
+       `level` = #{level,jdbcType=INTEGER},
+       `game_mode` = #{gameMode,jdbcType=VARCHAR}
      where id = #{id,jdbcType=INTEGER}
   </update>
   
@@ -199,6 +213,9 @@
       </if>
             <if test="level != null" >
         and `level` = #{level,jdbcType=INTEGER}
+      </if>
+            <if test="gameMode != null" >
+        and `game_mode` = #{gameMode,jdbcType=VARCHAR}
       </if>
             <if test="details != null" >
         and `details` = #{details,jdbcType=LONGVARCHAR}
@@ -234,6 +251,9 @@
         <if test="sudokuResult.level != null" >
       and `level` = #{sudokuResult.level,jdbcType=INTEGER}
     </if>
+        <if test="sudokuResult.gameMode != null" >
+      and `game_mode` = #{sudokuResult.gameMode,jdbcType=VARCHAR}
+    </if>
         <if test="sudokuResult.details != null" >
       and `details` = #{sudokuResult.details,jdbcType=LONGVARCHAR}
     </if>
@@ -249,6 +269,7 @@
    || order.property == 'timestamp'
    || order.property == 'datetime'
    || order.property == 'level'
+   || order.property == 'game_mode'
    || order.property == 'details'
         " >
         		${order.property} ${order.direction}

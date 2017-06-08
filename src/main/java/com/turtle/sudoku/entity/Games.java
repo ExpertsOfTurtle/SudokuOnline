@@ -13,6 +13,7 @@ public class Games{
 	private String status;
 	private String datetime;
 	private Integer problemid;
+	private String gameMode;
 		
 	public void setId(Integer id){
 		this.id = id;
@@ -102,6 +103,13 @@ public class Games{
 		return this.problemid;
 	}
 		
+	public void setGameMode(String gameMode){
+		this.gameMode = gameMode;
+	}
+	
+	public String getGameMode(){
+		return this.gameMode;
+	}
 		
 }
 

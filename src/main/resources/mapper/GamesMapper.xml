@@ -13,6 +13,7 @@
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="datetime" property="datetime" jdbcType="VARCHAR" />
     <result column="problemId" property="problemid" jdbcType="INTEGER" />
+    <result column="game_mode" property="gameMode" jdbcType="VARCHAR" />
   </resultMap>
 
  <sql id="Base_Column_List" >
@@ -26,7 +27,8 @@
    `level`,
    `status`,
    `datetime`,
-   `problemId`
+   `problemId`,
+   `game_mode`
  </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -53,7 +55,8 @@
      `level`,
      `status`,
      `datetime`,
-     `problemId`
+     `problemId`,
+     `game_mode`
     )
     values (
      #{id,jdbcType=INTEGER},
@@ -66,7 +69,8 @@
      #{level,jdbcType=INTEGER},
      #{status,jdbcType=VARCHAR},
      #{datetime,jdbcType=VARCHAR},
-     #{problemid,jdbcType=INTEGER}
+     #{problemid,jdbcType=INTEGER},
+     #{gameMode,jdbcType=VARCHAR}
  )
   </insert>
   
@@ -108,6 +112,9 @@
       <if test="problemid != null" >
         `problemId`,
       </if>
+      <if test="gameMode != null" >
+        `game_mode`,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -142,6 +149,9 @@
       </if>
       <if test="problemid != null" >
         #{problemid,jdbcType=INTEGER},
+      </if>
+      <if test="gameMode != null" >
+        #{gameMode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -179,6 +189,9 @@
        <if test="problemid != null" >
         `problemId`= #{problemid,jdbcType=INTEGER},
        </if>
+       <if test="gameMode != null" >
+        `game_mode`= #{gameMode,jdbcType=VARCHAR},
+       </if>
           </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -195,7 +208,8 @@
        `level` = #{level,jdbcType=INTEGER},
        `status` = #{status,jdbcType=VARCHAR},
        `datetime` = #{datetime,jdbcType=VARCHAR},
-       `problemId` = #{problemid,jdbcType=INTEGER}
+       `problemId` = #{problemid,jdbcType=INTEGER},
+       `game_mode` = #{gameMode,jdbcType=VARCHAR}
      where id = #{id,jdbcType=INTEGER}
   </update>
   
@@ -237,6 +251,9 @@
             <if test="problemid != null" >
         and `problemId` = #{problemid,jdbcType=INTEGER}
       </if>
+            <if test="gameMode != null" >
+        and `game_mode` = #{gameMode,jdbcType=VARCHAR}
+      </if>
           </where>
   </select>
 
@@ -277,6 +294,9 @@
         <if test="games.problemid != null" >
       and `problemId` = #{games.problemid,jdbcType=INTEGER}
     </if>
+        <if test="games.gameMode != null" >
+      and `game_mode` = #{games.gameMode,jdbcType=VARCHAR}
+    </if>
         <if test="pageable.sort != null" >
       order by 
       <foreach collection="pageable.sort" item="order" separator="," >
@@ -292,6 +312,7 @@
    || order.property == 'status'
    || order.property == 'datetime'
    || order.property == 'problemId'
+   || order.property == 'game_mode'
         " >
         		${order.property} ${order.direction}
         </if>
