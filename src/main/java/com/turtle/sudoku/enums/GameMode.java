@@ -1,22 +1,19 @@
 package com.turtle.sudoku.enums;
 
-public enum RequestType {
-	
-	Join("Join"),
-	Quit("Quit"),
-	Update("Update"),
-	Lock("Lock"),
-	Unlock("Unlock")
+public enum GameMode {
+	PK("PK"),
+	Cooperation("Cooperation")
 	;
-	
 	private String value;
-	
-	RequestType(String val) {
+
+	GameMode(String val) {
 		this.value = val;
 	}
+
 	public String getValue() {
 		return value;
 	}
+
 	public void setValue(String value) {
 		this.value = value;
 	}

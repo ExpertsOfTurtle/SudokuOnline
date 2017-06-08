@@ -5,6 +5,7 @@ public class CreateGameRequest {
 	private Integer secondToStart;
 	private String title;
 	private Integer level;
+	private String gameMode;
 	public String getUsername() {
 		return username;
 	}
@@ -29,6 +30,10 @@ public class CreateGameRequest {
 	public void setLevel(Integer level) {
 		this.level = level;
 	}
-	
-	
+	public String getGameMode() {
+		return gameMode;
+	}
+	public void setGameMode(String gameMode) {
+		this.gameMode = gameMode;
+	}
 }

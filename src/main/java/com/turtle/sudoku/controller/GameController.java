@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turtle.sudoku.bean.CreateGameRequest;
 import com.turtle.sudoku.bean.ErrorResponse;
+import com.turtle.sudoku.enums.GameMode;
 import com.turtle.sudoku.exception.SudokuException;
 import com.turtle.sudoku.exception.ValidationException;
 import com.turtle.sudoku.model.GamesModel;
@@ -55,16 +56,17 @@ public class GameController {
 			validateUsername(request.getUsername());
 			validateLevel(request.getLevel());
 			validateSecondToStart(request.getSecondToStart());
+			validateGameMode(request.getGameMode());
 			problemId = getRandomProblem(request.getLevel());
 		} catch (ValidationException e) {
 			ErrorResponse er = new ErrorResponse();
 			er.setErrorCode(e.getCode());
-			er.setMessage(e.getMessage());
+			er.setMessage(e.getMsg());
 			return ResponseEntity.ok(er);
 		} catch (SudokuException e) {
 			ErrorResponse er = new ErrorResponse();
 			er.setErrorCode(e.getCode());
-			er.setMessage(e.getMessage());
+			er.setMessage(e.getMsg());
 			return ResponseEntity.ok(er);
 		}
 		long createTime = System.currentTimeMillis();
@@ -74,6 +76,7 @@ public class GameController {
 		gm.setLevel(request.getLevel());
 		gm.setTitle(request.getTitle());		
 		gm.setCreateTime(createTime);
+		gm.setGameMode(request.getGameMode());
 		gm.setStartTime(createTime + request.getSecondToStart() * 1000);
 		gm.setDatetime(DateUtil.format(createTime, "yyyy-MM-dd HH:mm:ss"));
 		gm.setStatus("W");
@@ -164,5 +167,12 @@ public class GameController {
 		}
 		return true;
 	}
-	
+	private boolean validateGameMode(String gameMode) throws ValidationException {
+		for (GameMode gm : GameMode.values()) {
+			if (gm.getValue().equals(gameMode)) {
+				return true;
+			}
+		}
+		throw new ValidationException("", "gameMode is not valid");
+	}
 }
