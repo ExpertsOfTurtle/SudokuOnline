@@ -5,12 +5,16 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="problem" property="problem" jdbcType="VARCHAR" />
     <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="lastupdatetime" property="lastupdatetime" jdbcType="BIGINT" />
+    <result column="bestresult" property="bestresult" jdbcType="INTEGER" />
   </resultMap>
 
  <sql id="Base_Column_List" >
    `id`,
    `problem`,
-   `level`
+   `level`,
+   `lastupdatetime`,
+   `bestresult`
  </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -29,12 +33,16 @@
     insert into sudoku ( 
      `id`,
      `problem`,
-     `level`
+     `level`,
+     `lastupdatetime`,
+     `bestresult`
     )
     values (
      #{id,jdbcType=INTEGER},
      #{problem,jdbcType=VARCHAR},
-     #{level,jdbcType=INTEGER}
+     #{level,jdbcType=INTEGER},
+     #{lastupdatetime,jdbcType=BIGINT},
+     #{bestresult,jdbcType=INTEGER}
  )
   </insert>
   
@@ -52,6 +60,12 @@
       <if test="level != null" >
         `level`,
       </if>
+      <if test="lastupdatetime != null" >
+        `lastupdatetime`,
+      </if>
+      <if test="bestresult != null" >
+        `bestresult`,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -62,6 +76,12 @@
       </if>
       <if test="level != null" >
         #{level,jdbcType=INTEGER},
+      </if>
+      <if test="lastupdatetime != null" >
+        #{lastupdatetime,jdbcType=BIGINT},
+      </if>
+      <if test="bestresult != null" >
+        #{bestresult,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -75,6 +95,12 @@
        <if test="level != null" >
         `level`= #{level,jdbcType=INTEGER},
        </if>
+       <if test="lastupdatetime != null" >
+        `lastupdatetime`= #{lastupdatetime,jdbcType=BIGINT},
+       </if>
+       <if test="bestresult != null" >
+        `bestresult`= #{bestresult,jdbcType=INTEGER},
+       </if>
           </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -83,7 +109,9 @@
     update sudoku
     set 
        `problem` = #{problem,jdbcType=VARCHAR},
-       `level` = #{level,jdbcType=INTEGER}
+       `level` = #{level,jdbcType=INTEGER},
+       `lastupdatetime` = #{lastupdatetime,jdbcType=BIGINT},
+       `bestresult` = #{bestresult,jdbcType=INTEGER}
      where id = #{id,jdbcType=INTEGER}
   </update>
   
@@ -101,6 +129,12 @@
             <if test="level != null" >
         and `level` = #{level,jdbcType=INTEGER}
       </if>
+            <if test="lastupdatetime != null" >
+        and `lastupdatetime` = #{lastupdatetime,jdbcType=BIGINT}
+      </if>
+            <if test="bestresult != null" >
+        and `bestresult` = #{bestresult,jdbcType=INTEGER}
+      </if>
           </where>
   </select>
 
@@ -117,6 +151,12 @@
         <if test="sudoku.level != null" >
       and `level` = #{sudoku.level,jdbcType=INTEGER}
     </if>
+        <if test="sudoku.lastupdatetime != null" >
+      and `lastupdatetime` = #{sudoku.lastupdatetime,jdbcType=BIGINT}
+    </if>
+        <if test="sudoku.bestresult != null" >
+      and `bestresult` = #{sudoku.bestresult,jdbcType=INTEGER}
+    </if>
         <if test="pageable.sort != null" >
       order by 
       <foreach collection="pageable.sort" item="order" separator="," >
@@ -124,6 +164,8 @@
    order.property == 'id' 
    || order.property == 'problem'
    || order.property == 'level'
+   || order.property == 'lastupdatetime'
+   || order.property == 'bestresult'
         " >
         		${order.property} ${order.direction}
         </if>

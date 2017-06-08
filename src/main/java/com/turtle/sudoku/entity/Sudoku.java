@@ -6,6 +6,8 @@ public class Sudoku{
 	private Integer id;
 	private String problem;
 	private Integer level;
+	private Long lastupdatetime;
+	private Integer bestresult;
 		
 	public void setId(Integer id){
 		this.id = id;
@@ -29,6 +31,22 @@ public class Sudoku{
 	
 	public Integer getLevel(){
 		return this.level;
+	}
+		
+	public void setLastupdatetime(Long lastupdatetime){
+		this.lastupdatetime = lastupdatetime;
+	}
+	
+	public Long getLastupdatetime(){
+		return this.lastupdatetime;
+	}
+		
+	public void setBestresult(Integer bestresult){
+		this.bestresult = bestresult;
+	}
+	
+	public Integer getBestresult(){
+		return this.bestresult;
 	}
 		
 		
