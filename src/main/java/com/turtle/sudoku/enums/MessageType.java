@@ -1,6 +1,6 @@
 package com.turtle.sudoku.enums;
 
-public enum RequestType {
+public enum MessageType {
 	
 	Join("Join"),
 	Quit("Quit"),
@@ -11,7 +11,7 @@ public enum RequestType {
 	
 	private String value;
 	
-	RequestType(String val) {
+	MessageType(String val) {
 		this.value = val;
 	}
 	public String getValue() {

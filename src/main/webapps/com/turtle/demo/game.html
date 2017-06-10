@@ -1,0 +1,88 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>DEMO</title>
+
+<script type="text/javascript" src="jquery-1.7.min.js"></script>
+
+<script type="text/javascript" src="/sudoku/static/js/sockjs.min.js"></script>
+<script type="text/javascript" src="/sudoku/static/js/stomp.js"></script>
+    
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<link rel="stylesheet" type="text/css" href="turtle.css" />
+<link rel="stylesheet" type="text/css" href="sm.css" />
+<link rel="stylesheet" type="text/css" href="app.css" />
+<link rel="stylesheet" type="text/css" href="sudoku.css" />
+
+<script type="text/javascript" src="turtle.js"></script>
+
+</head>
+<body>
+	<div id="create" class="hidden1">
+		<div class="fullrow">
+			<label>Games:</label>
+			<div id="games">
+			</div>
+		</div>
+		<div class="fullrow">
+			<label>Username</label>
+			<div>
+				<input type="radio" name="user" value="Could" checked="checked">1</input>
+				<input type="radio" name="user" value="DFS">2</input>
+			</div>
+		</div>
+		<div class="fullrow">
+			<label>Level</label>
+			<div>
+				<select name="level">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+				</select>
+			</div>
+		</div>
+		<div class="fullrow">
+			<label>GameMode</label>
+			<div>
+				<select name="gameMode" disabled="disabled">
+					<option value="PK" selected="selected">PK</option>
+				</select>
+			</div>
+		</div>
+		<div class="fullrow">
+			<div>
+				<button onclick="onCreateGame()">Start</button>
+			</div>
+		</div>
+	</div>
+	<div id="waiting" >
+		<div class="fullrow">
+			<label id="level">等级：超高级</label>
+		</div>
+		<div class="fullrow">
+			<div>
+				<button>Start now</button>
+			</div>
+		</div>
+		<div class="fullrow">
+			<div id="chat">
+			Welcome<br>
+			</div>
+		</div>
+		
+	</div>
+	<div id="play" class="hidden">
+		
+	</div>
+</body>
+<script type="text/javascript">
+	$(document).ready(function(){
+		console.log("Ready");
+		connect();
+	});
+</script>
+</html>

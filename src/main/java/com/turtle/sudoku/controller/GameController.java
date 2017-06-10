@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,9 @@ import com.turtle.sudoku.util.DateUtil;
 @RequestMapping(value="/game")
 public class GameController {
 	private static Logger logger = LoggerFactory.getLogger(GameController.class);
+	
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
 	
 	@Autowired
 	private SudokuService sudokuService = null;
@@ -82,7 +86,11 @@ public class GameController {
 		gm.setStatus("W");
 		gm.setProblemid(problemId);
 		int rt = gameService.create(gm);
-		gm.setId(rt);
+//		gm.setId(rt);
+		System.out.println("id=" + rt);
+		
+		//广播：创建游戏
+		messagingTemplate.convertAndSend("/topic/create", gm);
 		
 		return ResponseEntity.ok(gm);
 	}

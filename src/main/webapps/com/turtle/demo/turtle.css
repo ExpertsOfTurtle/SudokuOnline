@@ -1,0 +1,30 @@
+.fullrow {
+	float:left;
+	width:100%;
+}
+.fullrow>label {
+	width:100%;
+	float:left;
+	padding:10px 2px 3px 20px;
+}
+.fullrow>div {
+	width:100%;
+	float:left;
+	padding:3px 2px 3px 10px;
+}
+.fullrow>div>select {
+	width:200px;
+	float:left;
+	padding:3px 2px 3px 10px;
+}
+.hidden {
+	display:none;
+}
+#chat {
+	border:1px solid black;
+	margin:10px;
+	float:left;
+	width:80%;
+	height:400px;
+	overflow-y:auto;
+}

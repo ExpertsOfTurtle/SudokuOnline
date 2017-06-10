@@ -1,13 +1,14 @@
 package com.turtle.sudoku.bean;
 
 public class SocketResponse {
-	private String requestType;
+	private String messageType;
 
-	public String getRequestType() {
-		return requestType;
+	public String getMessageType() {
+		return messageType;
 	}
 
-	public void setRequestType(String requestType) {
-		this.requestType = requestType;
+	public void setMessageType(String messageType) {
+		this.messageType = messageType;
 	}
+
 }

@@ -43,9 +43,12 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   
-  <insert id="insert" parameterType="com.turtle.sudoku.entity.Games" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" parameterType="com.turtle.sudoku.entity.Games"
+  useGeneratedKeys="true" keyProperty="id" keyColumn="id" >
+	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id"> 
+SELECT LAST_INSERT_ID() 
+</selectKey>
     insert into games ( 
-     `id`,
      `creator`,
      `create_time`,
      `start_time`,
@@ -59,7 +62,6 @@
      `game_mode`
     )
     values (
-     #{id,jdbcType=INTEGER},
      #{creator,jdbcType=VARCHAR},
      #{createTime,jdbcType=BIGINT},
      #{startTime,jdbcType=BIGINT},

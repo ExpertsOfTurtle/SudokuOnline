@@ -16,14 +16,15 @@ public class GamesModel implements Serializable{
 	private Integer problemid;
 	private String gameMode;
 		
-	public void setId(Integer id){
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
 		this.id = id;
 	}
-	
-	public Integer getId(){
-		return this.id;
-	}
-		
+
 	public void setCreator(String creator){
 		this.creator = creator;
 	}
