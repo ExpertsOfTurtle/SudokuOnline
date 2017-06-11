@@ -99,5 +99,12 @@ public class SudokuServiceImpl implements SudokuService {
 	}
 
 
+	@Override
+	public SudokuModel selectByGameId(Integer gameId) {
+		Sudoku sudoku = sudokuRepo.selectByGameId(gameId);
+		return BeanCopyUtils.map(sudoku, SudokuModel.class);
+	}
+
+
 
 }

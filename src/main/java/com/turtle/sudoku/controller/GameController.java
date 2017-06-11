@@ -124,9 +124,9 @@ public class GameController {
 	/*
 	 * 根据题目Id获取题目数据
 	 * */
-	@RequestMapping(value="/getProblem/{problemId}")
-	public @ResponseBody ResponseEntity<?> getProblem(@PathVariable("problemId")Integer problemId) {
-		SudokuModel sudoku = sudokuService.findByPrimaryKey(problemId);
+	@RequestMapping(value="/getProblem/{gameid}")
+	public @ResponseBody ResponseEntity<?> getProblem(@PathVariable("gameid")Integer gameId) {
+		SudokuModel sudoku = sudokuService.selectByGameId(gameId);
 		return ResponseEntity.ok(sudoku);
 	}
 	

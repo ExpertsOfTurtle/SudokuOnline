@@ -24,4 +24,6 @@ public interface SudokuService{
 	public int selectCount(SudokuModel sudokuModel);
 
 	public List<SudokuModel> selectByLevel(Integer level);
+	
+	public SudokuModel selectByGameId(Integer gameId);
 }

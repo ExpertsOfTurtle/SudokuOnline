@@ -181,6 +181,12 @@
     from sudoku
     where level = #{level,jdbcType=INTEGER}
   </select>
+  <select id="selectByGameId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sudoku
+    where id in (select problemid from games where id=#{gameId,jdbcType=INTEGER}) limit 1
+  </select>
  </mapper>
   
 
