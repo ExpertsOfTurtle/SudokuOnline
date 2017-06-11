@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import com.turtle.sudoku.entity.Sudoku;
 import com.turtle.sudoku.repository.SudokuRepository;
 import com.turtle.sudoku.model.SudokuModel;
@@ -19,7 +18,6 @@ public class SudokuServiceImpl implements SudokuService {
 	@Autowired
 	private SudokuRepository sudokuRepo;
 	
-
 	/*
 	 * @Transactional is not necessarry for the single atomic CRUD statement for better performance, 
 	 * but you still have to take care of @Transactional for multi-statements scenario.
@@ -95,7 +93,7 @@ public class SudokuServiceImpl implements SudokuService {
 
 
 	@Override
-	public List<SudokuModel> selectByLevel(Integer level) {
+	public List<SudokuModel> selectByLevel(Integer level) {		
 		List<Sudoku> list = sudokuRepo.selectByLevel(level);
 		return BeanCopyUtils.mapList(list, SudokuModel.class);
 	}

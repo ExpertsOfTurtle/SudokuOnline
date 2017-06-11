@@ -1,0 +1,28 @@
+#macro(getLevel $level)
+	#if($level==11)
+		初心级
+	#elseif($level==12)
+		入门级
+	#elseif($level==13)
+		初级
+	#elseif($level==14)
+		中级
+	#elseif($level==15)
+		高级
+	#elseif($level==16)
+		超高级
+	#elseif($level==17)
+		轻度骨灰级
+	#elseif($level==18)
+		中度骨灰级
+	#else
+		重度骨灰级
+	#end	
+#end
+
+#foreach ($game in $gameList)
+	<div class="fullrow">
+		<span>[$!{game.id}][#getLevel($!{game.level})]create by $!{game.creator}</span>
+		<a href="#" onclick="joinGame('$!{game.id}')">Join</a>
+	</div>
+#end

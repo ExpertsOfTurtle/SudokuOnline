@@ -4,15 +4,18 @@ var GAME = {
 	startTime:null,
 	level:null,
 	gameMode:null,
-	gameId:null
+	gameId:null,
+	username:null,
+	startTime:null,
+	startGameTimer:null
 }
-var stompClient = null;
-var commonClient = null;
+var stompClient = null;	//游戏内部的连接：聊天，对战过程
 function onCreateGame() {
+	clearInterval(tm);
 	var url = HOST + "sudoku/game/create";
 	var param = {
-		"username":$("[name=user]").val(),
-		"secondToStart":20,
+		"username":$('input:radio[name="user"]:checked').val(),
+		"secondToStart":120,
 		"title":"System",
 		"level":$("[name=level]").val(),
 		"gameMode":$("[name=gameMode]").val()
@@ -28,47 +31,105 @@ function onCreateGame() {
 			wf=JSON.stringify(response);
 			console.log(response);
 			$("#waiting").show();
-			$("#level").html(wf);
+			$("#level").html(wf.level);
 			$("#create").hide();
-			joinGame(response);
+			joinGame(response.id);
 		},
 		error:function(er) {
 			console.log("error");
 		}
 	});
 }
-function disconnect() {
+
+function disconnectGame(client) {
     if (stompClient != null) {
         stompClient.disconnect();
     }
-    setConnected(false);
+    stompClient = null;
     console.log('Disconnected');
 }
-function connect() {
-    var socket = new SockJS('/sudoku/endpointSang');
-    commonClient = Stomp.over(socket);
-    commonClient.connect({}, function (frame) {
-        console.log('Connected:' + frame);
-        commonClient.subscribe('/topic/create', function (response) {
-            var json = JSON.parse(response.body);
-            var html = json.level + " by " + json.creator + "<br>" + $("#games").html();
-        	$("#games").html(html);
-        })
-    });
+function getAllGamesInfo() {
+	var url = HOST + "sudoku/game/queryGame";
+	var param = {		
+	}
+	$("#games").html("Refreshing...");
+	console.log(param);
+	$.ajax({
+		type:"post",
+		url:url,
+		headers: {'Content-type': 'application/json;charset=UTF-8'},
+		data:JSON.stringify(param),
+		dataType:"text",
+		success:function(response) {
+			$("#games").html(response);
+		},
+		error:function(er) {
+			console.log("error");
+			$("#games").html("Fail");
+		}
+	});
 }
 function joinGame(gid) {
-	var gameId = gid;
+	clearInterval(tm);
+	disconnectGame();
+	gameId = gid;
+	console.log("joining game:" + gid);
     var socket = new SockJS('/sudoku/endpointSang');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        setConnected(true);
+//        setConnected(true);
         console.log('Connected:' + frame);
-        stompClient.subscribe('/topic/joingame/' + gameId, function (response) {
-            showResponse(JSON.parse(response.body).responseMessage);
+        $("#waiting").show();
+		$("#create").hide();
+        stompClient.subscribe('/topic/game/' + gameId, function (response) {
+        	bd = JSON.parse(response.body);
+        	if (bd.messageType == "Chat") {
+        		showResponse(JSON.parse(response.body));	
+        	} else if (bd.messageType == "Start") {
+        		var timestamp = bd.timestamp;
+        		$("#btnStart").attr("disabled","disabled")
+        		startTime = new Date().getTime() + 10 * 1000;
+        		startGameTimer = setInterval(onCountingTime,500);
+        	}            
         })
     });
 }
-function showResponse(message) {
-    var msg = message + "<br>" + $("#response").html();
-    $("#response").html(msg)
+function startGame() {
+	var nowTime = new Date().getTime();
+	var time = nowTime + 10 * 1000;
+	var obj = {
+		"gameId":gameId,
+		"timestamp":time,
+		"username":$('input:radio[name="user"]:checked').val(),
+		"requestType":"Start"
+	}
+	stompClient.send("/start", {}, JSON.stringify(obj));
+}
+function onCountingTime() {
+	var t = new Date().getTime();
+	var dif = startTime - t;
+	if (dif < 0) {
+		clearInterval(startGameTimer);
+		startGameTimer = null;
+		$("#systemInfo").html("Start!");
+	} else {
+		var msg = "还有 " + dif + " 毫秒开始比赛";
+		$("#systemInfo").html(msg);
+	}
+}
+function chat() {
+	var msg = $("#text").val();
+	var obj = {
+		"username":$('input:radio[name="user"]:checked').val(),
+		"message":msg,
+		"gameId":gameId,
+		"requestType":"Chat"
+	};
+	stompClient.send("/chat", {}, JSON.stringify(obj));
+}
+function showResponse(obj) {
+	console.log(obj);
+    var msg = obj.username + ":" + obj.message + "<br>" + $("#chat").html();
+    console.log("msg:" + msg);
+    $("#chat").html(msg)
 }

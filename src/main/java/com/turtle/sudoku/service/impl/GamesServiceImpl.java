@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import com.turtle.sudoku.entity.Games;
 import com.turtle.sudoku.repository.GamesRepository;
 import com.turtle.sudoku.model.GamesModel;
@@ -21,7 +20,6 @@ public class GamesServiceImpl implements GamesService {
 	@Autowired
 	private GamesRepository gamesRepo;
 	
-
 	/*
 	 * @Transactional is not necessarry for the single atomic CRUD statement for better performance, 
 	 * but you still have to take care of @Transactional for multi-statements scenario.
@@ -72,7 +70,10 @@ public class GamesServiceImpl implements GamesService {
 	 */
 	@Override
 	public int create(GamesModel gamesModel) {
-		return gamesRepo.insert(BeanCopyUtils.map(gamesModel, Games.class));
+		Games game = BeanCopyUtils.map(gamesModel, Games.class);
+		int rt = gamesRepo.insert(game);
+		gamesModel.setId(game.getId());
+		return game.getId();
 	}
 
 	/*

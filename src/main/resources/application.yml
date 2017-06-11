@@ -12,8 +12,10 @@ spring:
     maxWait: 60000
     testWhileIdle: true
     validationQuery: select 'x'
+
 server:
   port: 12002
   contextPath: /sudoku/
 mybatis:
   mapperLocations: classpath:mapper/*.xml
+  #mapperLocations: classpath:com/turtle/sudoku/entity/*.xml

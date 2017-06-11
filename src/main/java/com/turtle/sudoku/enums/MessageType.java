@@ -2,6 +2,8 @@ package com.turtle.sudoku.enums;
 
 public enum MessageType {
 	
+	Start("Start"),
+	Chat("Chat"),
 	Join("Join"),
 	Quit("Quit"),
 	Update("Update"),

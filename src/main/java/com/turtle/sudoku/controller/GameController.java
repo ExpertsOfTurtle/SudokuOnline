@@ -1,6 +1,8 @@
 package com.turtle.sudoku.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,10 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.turtle.sudoku.bean.CreateGameRequest;
 import com.turtle.sudoku.bean.ErrorResponse;
@@ -24,7 +30,7 @@ import com.turtle.sudoku.service.GamesService;
 import com.turtle.sudoku.service.SudokuService;
 import com.turtle.sudoku.util.DateUtil;
 
-@RestController
+@Controller
 @EnableAutoConfiguration
 @RequestMapping(value="/game")
 public class GameController {
@@ -40,7 +46,7 @@ public class GameController {
 	private GamesService gameService = null;
 	
 	@RequestMapping(value="/create/{username}/username")
-	public ResponseEntity<?> queryByProductIdList(@PathVariable("username") String username) {
+	public @ResponseBody ResponseEntity<?> queryByProductIdList(@PathVariable("username") String username) {
 		logger.debug("username={}", username);
 		
 		SudokuModel sudokuModel = sudokuService.findByPrimaryKey(1);
@@ -48,11 +54,13 @@ public class GameController {
 		return ResponseEntity.ok(sudokuModel);
 	}
 	
+
+	
 	/*
 	 * 创建游戏
 	 * */
 	@RequestMapping(value="/create")
-	public ResponseEntity<?> createGame(@RequestBody CreateGameRequest request) {
+	public @ResponseBody ResponseEntity<?> createGame(@RequestBody CreateGameRequest request) {
 		logger.debug("[{}] create a game of leve [{}]", request.getUsername(), request.getLevel());
 		
 		int problemId = 0;
@@ -86,7 +94,7 @@ public class GameController {
 		gm.setStatus("W");
 		gm.setProblemid(problemId);
 		int rt = gameService.create(gm);
-//		gm.setId(rt);
+		gm.setId(rt);
 		System.out.println("id=" + rt);
 		
 		//广播：创建游戏
@@ -95,11 +103,19 @@ public class GameController {
 		return ResponseEntity.ok(gm);
 	}
 	
+	@RequestMapping(value="/queryGame")
+	public String queryGames(ModelMap modelMap) {
+		long time = System.currentTimeMillis();
+		List<GamesModel> list = gameService.selectPendingGames(time);
+		modelMap.put("gameList", list);
+		return "gameslist";
+	}
+	
 	/*
 	 * 查询所有已经创建，还没开始的游戏
 	 * */
 	@RequestMapping(value="/queryAll")
-	public ResponseEntity<?> queryAllGames() {
+	public @ResponseBody ResponseEntity<?> queryAll() {
 		long time = System.currentTimeMillis();
 		List<GamesModel> list = gameService.selectPendingGames(time);
 		return ResponseEntity.ok(list);
@@ -109,7 +125,7 @@ public class GameController {
 	 * 根据题目Id获取题目数据
 	 * */
 	@RequestMapping(value="/getProblem/{problemId}")
-	public ResponseEntity<?> getProblem(@PathVariable("problemId")Integer problemId) {
+	public @ResponseBody ResponseEntity<?> getProblem(@PathVariable("problemId")Integer problemId) {
 		SudokuModel sudoku = sudokuService.findByPrimaryKey(problemId);
 		return ResponseEntity.ok(sudoku);
 	}
@@ -118,7 +134,7 @@ public class GameController {
 	 * 根据gameId，先查找题目Id，然后获取题目数据
 	 * */
 	@RequestMapping(value="/getProblem/gameId/{gameId}")
-	public ResponseEntity<?> getProblemByGameId(@PathVariable("gameId")Integer gameId) {
+	public @ResponseBody ResponseEntity<?> getProblemByGameId(@PathVariable("gameId")Integer gameId) {
 		GamesModel game = gameService.findByPrimaryKey(gameId);
 		if (game == null || game.getId() == null) {
 			ErrorResponse er = new ErrorResponse();
@@ -140,7 +156,7 @@ public class GameController {
 	/*
 	 * 根据Level从数据库查找所有题目，然后随机抽
 	 * */
-	private Integer getRandomProblem(Integer level) throws SudokuException {
+	private @ResponseBody Integer getRandomProblem(Integer level) throws SudokuException {
 		List<SudokuModel> list = sudokuService.selectByLevel(level);
 		if (list == null || list.size() == 0) {
 			throw new SudokuException("", "No problem of such level");

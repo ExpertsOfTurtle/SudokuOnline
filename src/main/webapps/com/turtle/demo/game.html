@@ -7,7 +7,7 @@
 
 <script type="text/javascript" src="/sudoku/static/js/sockjs.min.js"></script>
 <script type="text/javascript" src="/sudoku/static/js/stomp.js"></script>
-    
+
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
@@ -20,28 +20,31 @@
 
 </head>
 <body>
+	<div class="fullrow">
+		<label>Username</label>
+		<div>
+			<input type="radio" name="user" value="Could" checked="checked">Could</input>
+			<input type="radio" name="user" value="DFS">DFS</input>
+		</div>
+	</div>
 	<div id="create" class="hidden1">
 		<div class="fullrow">
-			<label>Games:</label>
-			<div id="games">
-			</div>
-		</div>
-		<div class="fullrow">
-			<label>Username</label>
-			<div>
-				<input type="radio" name="user" value="Could" checked="checked">1</input>
-				<input type="radio" name="user" value="DFS">2</input>
-			</div>
+			<label>Games:</label> <a href="#" onclick="getAllGamesInfo();">Refresh</a>
+			<div id="games"></div>
 		</div>
 		<div class="fullrow">
 			<label>Level</label>
 			<div>
 				<select name="level">
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
+					<option value="11">初心</option>
+					<option value="12">入门</option>
+					<option value="13">初级</option>
+					<option value="14">中级</option>
+					<option value="15">高级</option>
+					<option value="16">超高级</option>
+					<option value="17">轻度骨灰</option>
+					<option value="18">中度骨灰</option>
+					<option value="19">重度骨灰</option>
 				</select>
 			</div>
 		</div>
@@ -59,30 +62,38 @@
 			</div>
 		</div>
 	</div>
-	<div id="waiting" >
+	<div id="waiting">
 		<div class="fullrow">
 			<label id="level">等级：超高级</label>
 		</div>
 		<div class="fullrow">
 			<div>
-				<button>Start now</button>
+				<textarea id="text"></textarea>
+			</div>			
+		</div>
+		<div class="fullrow">
+			<div>
+				<button onclick="chat()">send</button>
+				<button id="btnStart" onclick="startGame()">Start now</button>
+			</div>
+			<div id="systemInfo">
 			</div>
 		</div>
 		<div class="fullrow">
 			<div id="chat">
-			Welcome<br>
+				Welcome<br>
 			</div>
 		</div>
-		
+
 	</div>
-	<div id="play" class="hidden">
-		
-	</div>
+	<div id="play" class="hidden"></div>
 </body>
 <script type="text/javascript">
-	$(document).ready(function(){
+	var tm;
+	$(document).ready(function() {
 		console.log("Ready");
-		connect();
+		getAllGamesInfo();
+//		tm = setInterval(getAllGamesInfo, 5 * 1000);
 	});
 </script>
 </html>
