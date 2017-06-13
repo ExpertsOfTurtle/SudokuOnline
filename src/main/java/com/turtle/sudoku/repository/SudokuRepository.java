@@ -30,4 +30,6 @@ public interface SudokuRepository{
     List<Sudoku> selectByLevel(Integer level);
     
     Sudoku selectByGameId(Integer gameId);
+    
+    int updateTimeAndResult(Sudoku sudoku);
 }

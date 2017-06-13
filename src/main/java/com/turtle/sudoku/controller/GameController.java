@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.turtle.sudoku.bean.CompleteRequest;
 import com.turtle.sudoku.bean.CreateGameRequest;
 import com.turtle.sudoku.bean.ErrorResponse;
 import com.turtle.sudoku.enums.GameMode;
@@ -26,7 +27,9 @@ import com.turtle.sudoku.exception.SudokuException;
 import com.turtle.sudoku.exception.ValidationException;
 import com.turtle.sudoku.model.GamesModel;
 import com.turtle.sudoku.model.SudokuModel;
+import com.turtle.sudoku.model.SudokuResultModel;
 import com.turtle.sudoku.service.GamesService;
+import com.turtle.sudoku.service.SudokuResultService;
 import com.turtle.sudoku.service.SudokuService;
 import com.turtle.sudoku.util.DateUtil;
 
@@ -44,6 +47,9 @@ public class GameController {
 	
 	@Autowired
 	private GamesService gameService = null;
+	
+	@Autowired
+	private SudokuResultService sudokuResultService = null;
 	
 	@RequestMapping(value="/create/{username}/username")
 	public @ResponseBody ResponseEntity<?> queryByProductIdList(@PathVariable("username") String username) {
@@ -152,6 +158,47 @@ public class GameController {
 		}
 		return ResponseEntity.ok(sudoku);
 	}
+	
+	/*
+	 * 完成
+	 * */
+	@RequestMapping(value="/complete")
+	public @ResponseBody ResponseEntity<?> complete(CompleteRequest request) {
+		logger.debug("{} complete the game, answer is:{}", request.getUsername(), request.getAnswer());
+		
+		
+		GamesModel game = gameService.findByPrimaryKey(request.getGameId());
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("gameid", request.getGameId());
+		map.put("username", request.getUsername());
+		SudokuResultModel srm = sudokuResultService.selectByGame(map);
+		if (srm != null) {
+			return ResponseEntity.ok(srm);
+		}
+		
+		srm = new SudokuResultModel();
+		srm.setGameid(request.getGameId());
+		srm.setLevel(game.getLevel());
+		srm.setUsername(request.getUsername());
+		srm.setDetails(request.getDetails());
+		srm.setUsetime(request.getUsetime());
+		srm.setGameMode(game.getGameMode());
+		srm.setDatetime(DateUtil.getDateTime());
+		srm.setTimestamp(System.currentTimeMillis());
+		
+		sudokuResultService.create(srm);
+		
+		SudokuModel sudoku = sudokuService.findByPrimaryKey(game.getProblemid());
+		if (sudoku.getBestresult() == null || sudoku.getBestresult() > request.getUsetime()) {
+			sudoku.setLastupdatetime(System.currentTimeMillis());
+			sudoku.setBestresult(request.getUsetime());
+			sudokuService.updateTimeAndResult(sudoku);
+		}
+		
+		return ResponseEntity.ok(srm);
+	}
+	
 	
 	/*
 	 * 根据Level从数据库查找所有题目，然后随机抽

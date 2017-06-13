@@ -179,7 +179,7 @@
     select 
     <include refid="Base_Column_List" />
     from sudoku
-    where level = #{level,jdbcType=INTEGER}
+    where level = #{level,jdbcType=INTEGER} and lastupdatetime is null
   </select>
   <select id="selectByGameId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -187,6 +187,13 @@
     from sudoku
     where id in (select problemid from games where id=#{gameId,jdbcType=INTEGER}) limit 1
   </select>
+  <update id="updateTimeAndResult" parameterType="com.turtle.sudoku.entity.Sudoku" >
+    update sudoku
+    set 
+       `lastupdatetime` = #{lastupdatetime,jdbcType=BIGINT},
+       `bestresult` = #{bestresult,jdbcType=INTEGER}
+     where id = #{id,jdbcType=INTEGER}
+  </update>
  </mapper>
   
 

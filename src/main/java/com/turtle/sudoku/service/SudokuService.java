@@ -26,4 +26,6 @@ public interface SudokuService{
 	public List<SudokuModel> selectByLevel(Integer level);
 	
 	public SudokuModel selectByGameId(Integer gameId);
+	
+	public int updateTimeAndResult(SudokuModel sudoku);
 }

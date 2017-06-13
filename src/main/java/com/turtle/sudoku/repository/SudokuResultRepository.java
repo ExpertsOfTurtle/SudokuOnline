@@ -2,6 +2,8 @@ package com.turtle.sudoku.repository;
 
 import com.turtle.sudoku.entity.SudokuResult;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -27,4 +29,5 @@ public interface SudokuResultRepository{
 
     List<SudokuResult> selectPage(@Param("sudokuResult") SudokuResult sudokuResult, @Param("pageable") Pageable pageable);
 	
+    SudokuResult selectByGame(Map map);
 }

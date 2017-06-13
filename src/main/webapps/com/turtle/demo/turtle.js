@@ -6,7 +6,9 @@ var GAME = {
 	gameId:null,
 	username:null,
 	startTime:null,
-	startGameTimer:null
+	startGameTimer:null,
+	currentTime:null,
+	completeTime:null
 }
 var stompClient = null;	//游戏内部的连接：聊天，对战过程
 function onCreateGame() {
@@ -14,7 +16,7 @@ function onCreateGame() {
 	var url = HOST + "sudoku/game/create";
 	var param = {
 		"username":$('input[name="user"]:checked').val(),
-		"secondToStart":120,
+		"secondToStart":1800,
 		"title":"System",
 		"level":$("[name=level]").val(),
 		"gameMode":$("[name=gameMode]").val()
@@ -87,7 +89,7 @@ function joinGame(gid) {
         	} else if (bd.messageType == "Start") {
         		var timestamp = bd.timestamp;
         		$("#btnStart").attr("disabled","disabled")
-        		GAME.startTime = new Date().getTime() + 10 * 1000;
+        		GAME.startTime = new Date().getTime() + 5 * 1000;
         		GAME.startGameTimer = setInterval(onCountingTime,500);
         	}            
         })
@@ -101,7 +103,7 @@ function startGame() {
 		"timestamp":time,
 		"username":$('input[name="user"]:checked').val(),
 		"requestType":"Start"
-	}
+	} 
 	stompClient.send("/start", {}, JSON.stringify(obj));
 }
 function onCountingTime() {
@@ -139,6 +141,10 @@ function getProblem() {
 			console.log(response);
 			var problem = response.problem;
 			updateBoard(problem);
+			currentTime = 0;
+			GAME.currentTime = new Date().getTime();
+			GAME.completeTime = null;
+			GAME.username = $('input[name="user"]:checked').val();
 			$("#play").show();
 			$("#waiting").hide();
 			$("#create").hide();

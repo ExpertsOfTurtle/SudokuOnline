@@ -328,7 +328,7 @@ SELECT LAST_INSERT_ID()
     select 
     <include refid="Base_Column_List" />
     from games
-    where start_time >= #{time,jdbcType=INTEGER}
+    where start_time >= #{time,jdbcType=INTEGER} and status = 'W'
   </select>
  </mapper>
   

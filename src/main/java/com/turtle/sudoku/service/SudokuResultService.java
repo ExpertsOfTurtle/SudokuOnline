@@ -1,6 +1,9 @@
 
 package com.turtle.sudoku.service;
 
+import java.util.Map;
+
+import com.turtle.sudoku.entity.SudokuResult;
 import com.turtle.sudoku.model.SudokuResultModel;
 
 public interface SudokuResultService{
@@ -20,4 +23,5 @@ public interface SudokuResultService{
 
 	public int selectCount(SudokuResultModel sudokuResultModel);
 	
+	public SudokuResultModel selectByGame(Map map);
 }

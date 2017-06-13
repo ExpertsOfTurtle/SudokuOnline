@@ -2,12 +2,14 @@ package com.turtle.sudoku.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.turtle.sudoku.bean.ChatRequest;
 import com.turtle.sudoku.bean.ChatResponse;
+import com.turtle.sudoku.bean.CompleteRequest;
 import com.turtle.sudoku.bean.JoinGameRequest;
 import com.turtle.sudoku.bean.JoinGameResponse;
 import com.turtle.sudoku.bean.RequestMessage;
@@ -16,6 +18,8 @@ import com.turtle.sudoku.bean.SocketRequest;
 import com.turtle.sudoku.bean.StartGameRequest;
 import com.turtle.sudoku.bean.StartGameResponse;
 import com.turtle.sudoku.enums.MessageType;
+import com.turtle.sudoku.model.GamesModel;
+import com.turtle.sudoku.service.GamesService;
 
 import net.sf.json.JSONObject;
 
@@ -23,6 +27,9 @@ import net.sf.json.JSONObject;
 public class PKController extends WsController {
 	private static Logger logger = LoggerFactory.getLogger(PKController.class);
 			
+	@Autowired
+	private GamesService gameService = null;
+	
 	@MessageMapping("/join")
 	public void joinGame(JoinGameRequest request) {
 		JoinGameResponse response = new JoinGameResponse();
@@ -63,9 +70,23 @@ public class PKController extends WsController {
 		StartGameResponse response = new StartGameResponse();
 		response.setMessageType(request.getRequestType());
 		response.setTimestamp(request.getTimestamp());
+		
+		GamesModel game = gameService.findByPrimaryKey(request.getGameId());
+		GamesModel g = new GamesModel();
+		g.setId(game.getId());
+		g.setStatus("S");
+		gameService.updateByPrimaryKeySelective(g);
+		
 		String topic = String.format("/topic/game/%d", request.getGameId());
 		doResponse(topic, response);
 	}
+	
+	@MessageMapping("/complete")
+	public void start(CompleteRequest request) {
+		logger.debug("{} complete the game [{}]", request.getUsername(), request.getGameId());
+		
+	}
+	
 
 	@RequestMapping("/wf")
 	public String hello4() {

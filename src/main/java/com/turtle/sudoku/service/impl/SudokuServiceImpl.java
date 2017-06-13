@@ -106,5 +106,11 @@ public class SudokuServiceImpl implements SudokuService {
 	}
 
 
+	@Override
+	public int updateTimeAndResult(SudokuModel sudoku) {
+		return sudokuRepo.updateTimeAndResult(BeanCopyUtils.map(sudoku, Sudoku.class));
+	}
+
+
 
 }

@@ -280,6 +280,12 @@
       limit ${pageable.offset}, ${pageable.pageSize}
     </if>
   </select>
+  <select id="selectByGame" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from sudoku_result
+    where gameid = #{gameid,jdbcType=INTEGER} and username = #{username,jdbcType=VARCHAR} limit 1 
+  </select>
  </mapper>
   
 
