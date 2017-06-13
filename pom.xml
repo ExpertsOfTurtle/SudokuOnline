@@ -118,13 +118,26 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<!-- <resources> <resource> <directory>src/main/resources</directory> <filtering>true</filtering> 
-			<excludes> <exclude>application-dev.properties</exclude> <exclude>application-prod.properties</exclude> 
-			<exclude>application.properties</exclude> </excludes> </resource> <resource> 
-			<directory>src/main/resources</directory> <filtering>true</filtering> <includes> 
-			<include>application-${profiles.active}.properties</include> <include>application.properties</include> 
-			</includes> </resource> <resource> <directory>lib</directory> <targetPath>BOOT-INF/lib/</targetPath> 
-			<includes> <include>**/*.jar</include> </includes> </resource> </resources> -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/webapps</directory>
+				<filtering>false</filtering>
+			</resource>
+			<resource>
+				<directory>lib</directory>
+				<targetPath>BOOT-INF/lib/</targetPath>
+				<includes>
+					<include>**/*.jar</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
