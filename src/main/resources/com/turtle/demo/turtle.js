@@ -83,17 +83,21 @@ function joinGame(gid) {
         $("#waiting").show();
 		$("#create").hide();
         stompClient.subscribe('/topic/game/' + GAME.gameId, function (response) {
-        	bd = JSON.parse(response.body);
+        	var bd = JSON.parse(response.body);
         	if (bd.messageType == "Chat") {
-        		showResponse(JSON.parse(response.body));	
+        		showResponse(bd);	
         	} else if (bd.messageType == "Start") {
         		var timestamp = bd.timestamp;
         		$("#btnStart").attr("disabled","disabled")
         		GAME.startTime = new Date().getTime() + 5 * 1000;
         		GAME.startGameTimer = setInterval(onCountingTime,500);
-        	}            
-        })
+        	} else if (bd.messageType == "Join") {
+        		welcomeJoin(bd);
+        	}
+        });
+        doJoin();
     });
+    
 }
 function startGame() {
 	var nowTime = new Date().getTime();
@@ -128,6 +132,16 @@ function chat() {
 		"requestType":"Chat"
 	};
 	stompClient.send("/chat", {}, JSON.stringify(obj));
+}
+function doJoin() {
+	var msg = $("#text").val();
+	var obj = {
+		"username":$('input[name="user"]:checked').val(),
+		"message":msg,
+		"gameId":GAME.gameId,
+		"requestType":"Join"
+	};
+	stompClient.send("/join", {}, JSON.stringify(obj));
 }
 function getProblem() {
 	var url = HOST + "sudoku/game/getProblem/" + GAME.gameId;
@@ -173,6 +187,12 @@ function updateBoard(problem) {
 function showResponse(obj) {
 	console.log(obj);
     var msg = obj.username + ":" + obj.message + "<br>" + $("#chat").html();
+    console.log("msg:" + msg);
+    $("#chat").html(msg)
+}
+function welcomeJoin(obj) {
+	console.log(obj);
+    var msg = "welcome " + obj.username + " !!<br>" + $("#chat").html();
     console.log("msg:" + msg);
     $("#chat").html(msg)
 }

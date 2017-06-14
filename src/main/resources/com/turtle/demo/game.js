@@ -140,7 +140,10 @@ $(document).on('click', '#btn_save', function() {
 			success : function(json) {
 				console.log(json);
 				if (json != null && json.usetime != null && json.usetime > 0) {
-					$.toast('你的用时：' + json.usetime / 1000 + ' 秒');
+					var second = json.usetime / 1000;
+					var minutes = second / 60;
+					second %= 60;
+					$.toast('你的用时：' + minutes + "'" + misecondnutes + "'");
 				} else {
 					$.toast('考虑再试一次');
 				}
