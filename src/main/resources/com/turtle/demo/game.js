@@ -115,7 +115,7 @@ $(document).on('click', '#btn_save', function() {
 		});
 		if (_userSolver.length != _$ptb_td.length) {
 			$.toast('还没完成！');
-//			return;
+			return;
 		}
 		if (GAME.completeTime == null) {
 			GAME.completeTime = new Date().getTime();
@@ -141,8 +141,8 @@ $(document).on('click', '#btn_save', function() {
 				console.log(json);
 				if (json != null && json.usetime != null && json.usetime > 0) {
 					var second = json.usetime / 1000;
-					var minutes = second / 60;
-					second %= 60;
+					var minutes = parseInt(second / 60);
+					second = parseInt(second) % 60;
 					$.toast('你的用时：' + minutes + "'" + misecondnutes + "'");
 				} else {
 					$.toast('考虑再试一次');
