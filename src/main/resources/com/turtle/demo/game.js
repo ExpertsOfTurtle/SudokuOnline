@@ -143,7 +143,7 @@ $(document).on('click', '#btn_save', function() {
 					var second = json.usetime / 1000;
 					var minutes = parseInt(second / 60);
 					second = parseInt(second) % 60;
-					$.toast('你的用时：' + minutes + "'" + misecondnutes + "'");
+					$.toast('你的用时：' + minutes + "'" + second + "'");
 				} else {
 					$.toast('考虑再试一次');
 				}

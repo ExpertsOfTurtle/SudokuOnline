@@ -1,5 +1,7 @@
 package com.turtle.sudoku.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,9 @@ import com.turtle.sudoku.bean.ResponseMessage;
 import com.turtle.sudoku.bean.SocketRequest;
 import com.turtle.sudoku.bean.StartGameRequest;
 import com.turtle.sudoku.bean.StartGameResponse;
+import com.turtle.sudoku.bean.UserStatus;
 import com.turtle.sudoku.enums.MessageType;
+import com.turtle.sudoku.game.service.IGameService;
 import com.turtle.sudoku.model.GamesModel;
 import com.turtle.sudoku.service.GamesService;
 
@@ -30,12 +34,19 @@ public class PKController extends WsController {
 	@Autowired
 	private GamesService gameService = null;
 	
+	@Autowired
+	private IGameService redisGameService = null;
+	
 	@MessageMapping("/join")
 	public void joinGame(JoinGameRequest request) {
 		JoinGameResponse response = new JoinGameResponse();
 		response.setGameId(request.getGameId());
 		response.setUsername(request.getUsername());
 		response.setMessageType(MessageType.Join.getValue());
+		
+		List<UserStatus> userList = redisGameService.addUser(request.getGameId(), request.getUsername());
+		response.setUserList(userList);
+		
 		String topic = String.format("/topic/game/%d", request.getGameId());
 		doResponse(topic, response);
 	}

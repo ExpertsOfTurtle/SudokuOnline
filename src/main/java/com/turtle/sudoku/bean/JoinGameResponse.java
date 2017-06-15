@@ -1,8 +1,11 @@
 package com.turtle.sudoku.bean;
 
+import java.util.List;
+
 public class JoinGameResponse extends SocketResponse {
 	private String username;
 	private Integer gameId;
+	private List<UserStatus> userList;
 	public String getUsername() {
 		return username;
 	}
@@ -14,5 +17,11 @@ public class JoinGameResponse extends SocketResponse {
 	}
 	public void setGameId(Integer gameId) {
 		this.gameId = gameId;
+	}
+	public List<UserStatus> getUserList() {
+		return userList;
+	}
+	public void setUserList(List<UserStatus> userList) {
+		this.userList = userList;
 	}
 }

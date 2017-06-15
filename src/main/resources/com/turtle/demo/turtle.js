@@ -194,5 +194,14 @@ function welcomeJoin(obj) {
 	console.log(obj);
     var msg = "welcome " + obj.username + " !!<br>" + $("#chat").html();
     console.log("msg:" + msg);
-    $("#chat").html(msg)
+    $("#chat").html(msg);
+    
+    var id = "LI_" + obj.username;
+    var obj = $("#" + id);
+    if (obj.length == 0) {
+    	x=$("<li/>");
+    	$(x).attr("id", id);
+    	$(x).text(obj.username);
+    	$("#otherPlayers ul").append(x);
+    }
 }
