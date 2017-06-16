@@ -70,6 +70,7 @@ function getAllGamesInfo() {
 		}
 	});
 }
+
 function joinGame(gid) {
 	clearInterval(tm);
 	disconnectGame();
@@ -93,6 +94,8 @@ function joinGame(gid) {
         		GAME.startGameTimer = setInterval(onCountingTime,500);
         	} else if (bd.messageType == "Join") {
         		welcomeJoin(bd);
+        	} else if (bd.messageType == "Update") {
+        		updateStatus(bd);
         	}
         });
         doJoin();
@@ -143,6 +146,16 @@ function doJoin() {
 	};
 	stompClient.send("/join", {}, JSON.stringify(obj));
 }
+function sendUpdate(process) {
+	var msg = $("#text").val();
+	var obj = {
+		"username":$('input[name="user"]:checked').val(),
+		"gameId":GAME.gameId,
+		"process":process,
+		"requestType":"Update"
+	};
+	stompClient.send("/updateStatus", {}, JSON.stringify(obj));
+}
 function getProblem() {
 	var url = HOST + "sudoku/game/getProblem/" + GAME.gameId;
 	$.ajax({
@@ -159,6 +172,7 @@ function getProblem() {
 			GAME.currentTime = new Date().getTime();
 			GAME.completeTime = null;
 			GAME.username = $('input[name="user"]:checked').val();
+			sd.Start();
 			$("#play").show();
 			$("#waiting").hide();
 			$("#create").hide();
@@ -202,11 +216,28 @@ function welcomeJoin(obj) {
     	var id = "li_" + username;
         var obj = $("#" + id);
         if (obj.length == 0) {
-        	x=$("<li/>");
+        	var x=$("<li><div/></li>");
         	$(x).attr("id", id);
         	$("#otherPlayers ul").append(x);
-        	$(x).html(username);
+//        	$(x).html(username);
         }
     }
-    
+}
+function updateStatus(obj) {
+	var username = obj.username;
+	var process = obj.process;
+	var x = "#li_" + username + " >div";
+	$(x).html(obj.username + ":" + process + "%");
+	$(x).css("width", process + "%");
+	if (process < 20) {
+		$(x).css("background-color", "#e23e0d");
+	} else if (process < 40) {
+		$(x).css("background-color", "#daa328");
+	} else if (process < 60) {
+		$(x).css("background-color", "#5882f7");
+	} else if (process < 80) {
+		$(x).css("background-color", "#35c7d6");
+	} else if (process <= 100) {
+		$(x).css("background-color", "#2ada38");
+	}
 }

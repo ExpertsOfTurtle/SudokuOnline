@@ -103,6 +103,11 @@ var sd = sd || {
         solverOK: 'Yes, I\'m Ready',
         solverCancel: 'No, Lets Wait',
         workCellId: '',
+        timer_updateProcess: null,
+        doUpdateProcess:function() {
+        	var process = this.GetProgress();
+        	sendUpdate(process);
+        },
         pad:function(number, length) {
             var str = '' + number;
             while (str.length < length) {str = '0' + str;}
@@ -117,13 +122,12 @@ var sd = sd || {
         },
         Start: function () {
             //$("#disTime").val(this.min + ":" + this.sec);
-            this.go = setTimeout("sd.Start()", 1000);
-            this.tsec++;
-            this.sec++;
-            if (this.sec == 60) {
-                this.sec = 0;
-                this.min++
-            }
+            this.go = setTimeout("sd.Start()", 5000);
+            this.tsec+=5;
+            this.sec+=5;
+            this.min += this.sec / 60;
+            this.sec %= 60;
+            this.doUpdateProcess();
         },
         //时间 ----ok
         Stop: function () {
@@ -249,6 +253,17 @@ var sd = sd || {
                     $(this).html('&nbsp;');
                 }
             });
+            
+            var t = (new Date()).getTime() - this.prevTime;
+            t = this.prevTime == 0 ? 0 : t;
+            t = t > 0 ? Math.floor(t / 10) : 0;
+            
+            this.prevTime = (new Date()).getTime();
+            
+            this.actionSource += "0s0$0" + "|" + t + "#";//f.value
+            //console.info(this.actionSource);
+            this.actionIndex++;
+            this.prt++; //new
         },
         //还原所有 ok
         ShowAll: function () {

@@ -19,11 +19,14 @@ import com.turtle.sudoku.bean.ResponseMessage;
 import com.turtle.sudoku.bean.SocketRequest;
 import com.turtle.sudoku.bean.StartGameRequest;
 import com.turtle.sudoku.bean.StartGameResponse;
+import com.turtle.sudoku.bean.UpdateStatusRequest;
+import com.turtle.sudoku.bean.UpdateStatusResponse;
 import com.turtle.sudoku.bean.UserStatus;
 import com.turtle.sudoku.enums.MessageType;
 import com.turtle.sudoku.game.service.IGameService;
 import com.turtle.sudoku.model.GamesModel;
 import com.turtle.sudoku.service.GamesService;
+import com.turtle.sudoku.util.StringUtil;
 
 import net.sf.json.JSONObject;
 
@@ -36,6 +39,21 @@ public class PKController extends WsController {
 	
 	@Autowired
 	private IGameService redisGameService = null;
+	
+	@MessageMapping("/updateStatus")
+	public void updateStatus(UpdateStatusRequest request) {
+		UpdateStatusResponse response = new UpdateStatusResponse();
+		response.setMessageType(MessageType.Update.getValue());
+		response.setProcess(request.getProcess());
+		response.setUsername(request.getUsername());
+		
+		if (!StringUtil.isEmpty(request.getDetails())) {
+			redisGameService.appendUserAction(request.getGameId(), request.getUsername(), request.getDetails());
+		}
+		
+		String topic = String.format("/topic/game/%d", request.getGameId());
+		doResponse(topic, response);
+	}
 	
 	@MessageMapping("/join")
 	public void joinGame(JoinGameRequest request) {

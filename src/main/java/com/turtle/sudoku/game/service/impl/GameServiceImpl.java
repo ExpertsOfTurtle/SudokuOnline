@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.turtle.sudoku.bean.UserStatus;
 import com.turtle.sudoku.game.service.IGameService;
 import com.turtle.sudoku.game.service.IRedisService;
+import com.turtle.sudoku.util.StringUtil;
 
 @Service
 public class GameServiceImpl implements IGameService {
@@ -28,7 +29,7 @@ public class GameServiceImpl implements IGameService {
 	@Override
 	public List<UserStatus> getUsers(Integer gameId) {
 		synchronized (arr[gameId%N]) {
-			String key = String.format("Game_%d", gameId);
+			String key = buildGameKey(gameId);
 			List<UserStatus> list = redisService.getList(key, UserStatus.class);
 			return list;
 		}
@@ -54,7 +55,7 @@ public class GameServiceImpl implements IGameService {
 	@Override
 	public List<UserStatus> addUser(Integer gameId, String username) {
 		synchronized (arr[gameId%N]) {
-			String key = String.format("Game_%d", gameId);
+			String key = buildGameKey(gameId);
 			UserStatus user = new UserStatus();
 			user.setGameId(gameId);
 			user.setUsername(username);
@@ -81,4 +82,25 @@ public class GameServiceImpl implements IGameService {
 		}
 	}
 
+	@Override
+	public String appendUserAction(Integer gameId, String username, String details) {
+		String key = buildUserActionKey(gameId, username);
+		String str = redisService.get(key);
+		if (StringUtil.isEmpty(str)) {
+			str = "";
+		}
+		str += details;
+		redisService.set(key, str);
+		redisService.expire(key, expireTime);
+		return str;
+	}
+
+	private String buildGameKey(Integer gameId) {
+		String key = String.format("Game_%d", gameId);
+		return key;
+	}
+	private String buildUserActionKey(Integer gameId, String username) {
+		String key = String.format("Game_%d_User_%s", gameId, username);
+		return key;
+	}
 }

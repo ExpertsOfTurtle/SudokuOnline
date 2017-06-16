@@ -54,3 +54,12 @@
 	animation:myfirst 2s;
 	-webkit-animation:myfirst 2s;
 }
+#otherPlayers li {
+	width: 400px;
+    background-color: #a3bcef;
+    margin: 1px;
+}
+#otherPlayers li>div {
+	background-color: #bca3ef;
+    margin: 1px;
+}

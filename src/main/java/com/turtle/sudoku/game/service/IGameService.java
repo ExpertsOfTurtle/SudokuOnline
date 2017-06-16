@@ -8,4 +8,5 @@ public interface IGameService {
 	public List<UserStatus> getUsers(Integer gameId);
 	public UserStatus getUser(Integer gameId, String username);
 	public List<UserStatus> addUser(Integer gameId, String username);
+	public String appendUserAction(Integer gameId, String username, String details);
 }
