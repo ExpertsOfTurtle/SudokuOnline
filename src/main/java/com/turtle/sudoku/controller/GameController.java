@@ -95,7 +95,7 @@ public class GameController {
 		gm.setTitle(request.getTitle());		
 		gm.setCreateTime(createTime);
 		gm.setGameMode(request.getGameMode());
-//		gm.setStartTime(createTime + request.getSecondToStart() * 1000);
+		gm.setStartTime(createTime + request.getSecondToStart() * 1000);
 		gm.setDatetime(DateUtil.format(createTime, "yyyy-MM-dd HH:mm:ss"));
 		gm.setStatus("W");
 		gm.setProblemid(problemId);
