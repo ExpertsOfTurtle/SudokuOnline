@@ -149,12 +149,12 @@ function doJoin() {
 }
 function sendUpdate(process) {
 	var dtls = "";
-	if (previousActionIndex == null || previousActionIndex != sd.actionIndex) {
+	if (GAME.previousActionIndex == null || GAME.previousActionIndex != sd.actionIndex) {
 		dtls = sd.actionSource;
 	} else {
 		dtls = "";
 	}
-	previousActionIndex = sd.actionIndex;
+	GAME.previousActionIndex = sd.actionIndex;
 	var msg = $("#text").val();
 	var obj = {
 		"username":$('input[name="user"]:checked').val(),
