@@ -147,6 +147,7 @@ $(document).on('click', '#btn_save', function() {
 					sd.Stop();
 					playTimer.stop().once();
 					playTimer = undefined;
+					sd.doUpdateProcess();
 				} else {
 					$.toast('考虑再试一次');
 				}

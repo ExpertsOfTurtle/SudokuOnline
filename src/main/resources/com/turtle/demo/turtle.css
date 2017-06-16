@@ -55,7 +55,7 @@
 	-webkit-animation:myfirst 2s;
 }
 #otherPlayers li {
-	width: 400px;
+	width: 90%;
     background-color: #a3bcef;
     margin: 1px;
 }
