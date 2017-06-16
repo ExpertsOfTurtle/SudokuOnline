@@ -152,6 +152,7 @@ function sendUpdate(process) {
 		"username":$('input[name="user"]:checked').val(),
 		"gameId":GAME.gameId,
 		"process":process,
+		"details": sd.actionSource,
 		"requestType":"Update"
 	};
 	stompClient.send("/updateStatus", {}, JSON.stringify(obj));

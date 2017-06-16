@@ -13,7 +13,7 @@ import com.turtle.sudoku.util.StringUtil;
 
 @Service
 public class GameServiceImpl implements IGameService {
-	private static final long expireTime = 60;
+	private static final long expireTime = 120;
 	public static Integer[] arr;
 	private static int N = 100;
 	static {
@@ -85,11 +85,12 @@ public class GameServiceImpl implements IGameService {
 	@Override
 	public String appendUserAction(Integer gameId, String username, String details) {
 		String key = buildUserActionKey(gameId, username);
-		String str = redisService.get(key);
+	/*	String str = redisService.get(key);
 		if (StringUtil.isEmpty(str)) {
 			str = "";
 		}
-		str += details;
+		str += details;*/
+		String str = details;
 		redisService.set(key, str);
 		redisService.expire(key, expireTime);
 		return str;

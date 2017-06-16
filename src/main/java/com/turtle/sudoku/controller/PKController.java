@@ -104,18 +104,18 @@ public class PKController extends WsController {
 		GamesModel g = new GamesModel();
 		g.setId(game.getId());
 		g.setStatus("S");
+		g.setStartTime(System.currentTimeMillis() + 5 * 1000);//5秒后开始
 		gameService.updateByPrimaryKeySelective(g);
 		
 		String topic = String.format("/topic/game/%d", request.getGameId());
 		doResponse(topic, response);
 	}
-	
-	@MessageMapping("/complete")
-	public void start(CompleteRequest request) {
-		logger.debug("{} complete the game [{}]", request.getUsername(), request.getGameId());
-		
-	}
-	
+
+//	@MessageMapping("/complete")
+//	public void complete(CompleteRequest request) {
+//		logger.debug("{} complete the game [{}]", request.getUsername(), request.getGameId());
+//		
+//	}
 
 	@RequestMapping("/wf")
 	public String hello4() {

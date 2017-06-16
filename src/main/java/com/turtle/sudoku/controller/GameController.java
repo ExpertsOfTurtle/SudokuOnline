@@ -95,7 +95,7 @@ public class GameController {
 		gm.setTitle(request.getTitle());		
 		gm.setCreateTime(createTime);
 		gm.setGameMode(request.getGameMode());
-		gm.setStartTime(createTime + request.getSecondToStart() * 1000);
+//		gm.setStartTime(createTime + request.getSecondToStart() * 1000);
 		gm.setDatetime(DateUtil.format(createTime, "yyyy-MM-dd HH:mm:ss"));
 		gm.setStatus("W");
 		gm.setProblemid(problemId);
@@ -166,8 +166,8 @@ public class GameController {
 	public @ResponseBody ResponseEntity<?> complete(CompleteRequest request) {
 		logger.debug("{} complete the game, answer is:{}", request.getUsername(), request.getAnswer());
 		
-		
 		GamesModel game = gameService.findByPrimaryKey(request.getGameId());
+		long curTime = System.currentTimeMillis();
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("gameid", request.getGameId());
@@ -182,7 +182,8 @@ public class GameController {
 		srm.setLevel(game.getLevel());
 		srm.setUsername(request.getUsername());
 		srm.setDetails(request.getDetails());
-		srm.setUsetime(request.getUsetime());
+		long useTime = curTime - game.getStartTime();
+		srm.setUsetime((int)useTime);
 		srm.setGameMode(game.getGameMode());
 		srm.setDatetime(DateUtil.getDateTime());
 		srm.setTimestamp(System.currentTimeMillis());
