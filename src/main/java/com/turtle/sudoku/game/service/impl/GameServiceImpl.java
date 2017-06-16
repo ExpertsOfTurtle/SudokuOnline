@@ -13,7 +13,7 @@ import com.turtle.sudoku.util.StringUtil;
 
 @Service
 public class GameServiceImpl implements IGameService {
-	private static final long expireTime = 120;
+	private static final long expireTime = 20*60;//second
 	public static Integer[] arr;
 	private static int N = 100;
 	static {

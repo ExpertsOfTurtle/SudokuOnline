@@ -8,7 +8,8 @@ var GAME = {
 	startTime:null,
 	startGameTimer:null,
 	currentTime:null,
-	completeTime:null
+	completeTime:null,
+	previousActionIndex:-1
 }
 var stompClient = null;	//游戏内部的连接：聊天，对战过程
 function onCreateGame() {
@@ -147,12 +148,19 @@ function doJoin() {
 	stompClient.send("/join", {}, JSON.stringify(obj));
 }
 function sendUpdate(process) {
+	var dtls = "";
+	if (previousActionIndex == null || previousActionIndex != sd.actionIndex) {
+		dtls = sd.actionSource;
+	} else {
+		dtls = "";
+	}
+	previousActionIndex = sd.actionIndex;
 	var msg = $("#text").val();
 	var obj = {
 		"username":$('input[name="user"]:checked').val(),
 		"gameId":GAME.gameId,
 		"process":process,
-		"details": sd.actionSource,
+		"details": dtls,
 		"requestType":"Update"
 	};
 	stompClient.send("/updateStatus", {}, JSON.stringify(obj));
