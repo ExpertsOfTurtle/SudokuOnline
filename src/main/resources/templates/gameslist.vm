@@ -22,7 +22,8 @@
 
 #foreach ($game in $gameList)
 	<div class="fullrow">
-		<span>[$!{game.id}][#getLevel($!{game.level})]create by $!{game.creator}</span>
-		<a href="#" onclick="joinGame('$!{game.id}')">Join</a>
+		<span>[$!{game.id}][#getLevel($!{game.level})]create by $!{game.creator} @$!{game.datetime}</span>
+		<a href="#" onclick="joinGame('$!{game.id}','$!{game.status}');">Join</a>
+		
 	</div>
 #end

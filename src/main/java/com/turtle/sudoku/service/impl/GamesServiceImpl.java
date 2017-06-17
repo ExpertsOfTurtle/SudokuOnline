@@ -104,5 +104,12 @@ public class GamesServiceImpl implements GamesService {
 	}
 
 
+	@Override
+	public List<GamesModel> selectRecentGames() {
+		List<Games> list =gamesRepo.selectRecentGames();
+		return BeanCopyUtils.mapList(list, GamesModel.class);
+	}
+
+
 
 }

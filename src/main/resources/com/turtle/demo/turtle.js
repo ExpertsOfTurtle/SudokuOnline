@@ -72,7 +72,7 @@ function getAllGamesInfo() {
 	});
 }
 
-function joinGame(gid) {
+function joinGame(gid, status) {
 	clearInterval(tm);
 	disconnectGame();
 	GAME.gameId = gid;
@@ -102,6 +102,11 @@ function joinGame(gid) {
         	}
         });
         doJoin();
+        if (status == "S") {
+        	$("#btnStart").attr("disabled","disabled")
+        	GAME.startTime = new Date().getTime() + 5 * 1000;
+    		GAME.startGameTimer = setInterval(onCountingTime,500);
+        }
     });
     
 }

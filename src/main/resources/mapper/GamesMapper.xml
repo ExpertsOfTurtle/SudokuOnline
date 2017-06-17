@@ -330,6 +330,13 @@ SELECT LAST_INSERT_ID()
     from games
     where start_time >= #{time,jdbcType=INTEGER} and status = 'W'
   </select>
+  <select id="selectRecentGames" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+    from games
+    where status != 'E'
+    order by id desc limit 10;
+  </select>
  </mapper>
   
 

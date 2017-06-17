@@ -112,7 +112,8 @@ public class GameController {
 	@RequestMapping(value="/queryGame")
 	public String queryGames(ModelMap modelMap) {
 		long time = System.currentTimeMillis();
-		List<GamesModel> list = gameService.selectPendingGames(time);
+//		List<GamesModel> list = gameService.selectPendingGames(time);
+		List<GamesModel> list = gameService.selectRecentGames();
 		modelMap.put("gameList", list);
 		return "gameslist";
 	}
@@ -123,7 +124,8 @@ public class GameController {
 	@RequestMapping(value="/queryAll")
 	public @ResponseBody ResponseEntity<?> queryAll() {
 		long time = System.currentTimeMillis();
-		List<GamesModel> list = gameService.selectPendingGames(time);
+//		List<GamesModel> list = gameService.selectPendingGames(time);
+		List<GamesModel> list = gameService.selectRecentGames();
 		return ResponseEntity.ok(list);
 	}
 	
@@ -166,8 +168,15 @@ public class GameController {
 	public @ResponseBody ResponseEntity<?> complete(CompleteRequest request) {
 		logger.debug("{} complete the game, answer is:{}", request.getUsername(), request.getAnswer());
 		
-		GamesModel game = gameService.findByPrimaryKey(request.getGameId());
 		long curTime = System.currentTimeMillis();
+		
+		GamesModel game = gameService.findByPrimaryKey(request.getGameId());
+		GamesModel gm = new GamesModel();
+		gm.setId(game.getId());
+		gm.setEndTime(curTime);
+		gm.setStatus("E");
+		gameService.updateByPrimaryKeySelective(gm);
+		
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("gameid", request.getGameId());

@@ -23,6 +23,7 @@ public interface GamesService{
 
 	public int selectCount(GamesModel gamesModel);
 	
-	List<GamesModel> selectPendingGames(Long time);
+	public List<GamesModel> selectPendingGames(Long time);
+	public List<GamesModel> selectRecentGames();
 	
 }

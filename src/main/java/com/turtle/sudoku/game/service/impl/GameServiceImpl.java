@@ -3,7 +3,10 @@ package com.turtle.sudoku.game.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.turtle.sudoku.bean.UserStatus;
@@ -13,7 +16,11 @@ import com.turtle.sudoku.util.StringUtil;
 
 @Service
 public class GameServiceImpl implements IGameService {
-	private static final long expireTime = 20*60;//second
+	private static Logger logger = LoggerFactory.getLogger(GameServiceImpl.class);
+		
+	@Value("${redis.expireTime}")
+	private Integer expireTimeInteger;
+	
 	public static Integer[] arr;
 	private static int N = 100;
 	static {
@@ -66,17 +73,17 @@ public class GameServiceImpl implements IGameService {
 				list = new ArrayList<>();
 				list.add(user);
 				redisService.setList(key, list);
-				redisService.expire(key, expireTime);
+				redisService.expire(key, expireTimeInteger);
 			} else {
 				for (UserStatus us : list) {
 					if (us.getUsername().equals(username)) {
-						redisService.expire(key, expireTime);
+						redisService.expire(key, expireTimeInteger);
 						return list;
 					}
 				}
 				list.add(user);
 				redisService.setList(key, list);
-				redisService.expire(key, expireTime);
+				redisService.expire(key, expireTimeInteger);
 			}
 			return list;
 		}
@@ -92,7 +99,7 @@ public class GameServiceImpl implements IGameService {
 		str += details;*/
 		String str = details;
 		redisService.set(key, str);
-		redisService.expire(key, expireTime);
+		redisService.expire(key, expireTimeInteger);
 		return str;
 	}
 
