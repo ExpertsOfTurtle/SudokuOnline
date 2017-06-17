@@ -145,9 +145,12 @@ $(document).on('click', '#btn_save', function() {
 					second = parseInt(second) % 60;
 					$.toast('你的用时：' + minutes + "'" + second + "'");
 					sd.Stop();
-					playTimer.stop().once();
-					playTimer = undefined;
+					if (playTimer != undefined) {
+						playTimer.stop().once();
+						playTimer = undefined;
+					}
 					sd.doUpdateProcess();
+					sendComplete();
 				} else {
 					$.toast('考虑再试一次');
 				}

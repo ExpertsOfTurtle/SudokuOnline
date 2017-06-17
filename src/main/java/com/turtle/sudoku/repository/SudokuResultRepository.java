@@ -30,4 +30,6 @@ public interface SudokuResultRepository{
     List<SudokuResult> selectPage(@Param("sudokuResult") SudokuResult sudokuResult, @Param("pageable") Pageable pageable);
 	
     SudokuResult selectByGame(Map map);
+    
+    int getRank(Map map);
 }

@@ -97,6 +97,8 @@ function joinGame(gid) {
         		welcomeJoin(bd);
         	} else if (bd.messageType == "Update") {
         		updateStatus(bd);
+        	} else if (bd.messageType == "Complete") {
+        		complete(bd);
         	}
         });
         doJoin();
@@ -164,6 +166,16 @@ function sendUpdate(process) {
 		"requestType":"Update"
 	};
 	stompClient.send("/updateStatus", {}, JSON.stringify(obj));
+}
+function sendComplete() {
+	var msg = $("#text").val();
+	var obj = {
+		"username":$('input[name="user"]:checked').val(),
+		"gameId":GAME.gameId,
+		"details": sd.actionIndex,
+		"requestType":"Complete"
+	};
+	stompClient.send("/complete", {}, JSON.stringify(obj));
 }
 function getProblem() {
 	var url = HOST + "sudoku/game/getProblem/" + GAME.gameId;
@@ -249,4 +261,10 @@ function updateStatus(obj) {
 	} else if (process <= 100) {
 		$(x).css("background-color", "#2ada38");
 	}
+}
+function complete(obj) {
+	var x = "#li_" + obj.username + " >div";
+	$(x).html(obj.username + ":" + obj.result);
+	$(x).css("width", "100%");
+	$(x).css("background-color", "#2ada38");
 }

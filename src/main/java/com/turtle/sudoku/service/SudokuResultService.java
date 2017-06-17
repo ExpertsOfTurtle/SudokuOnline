@@ -24,4 +24,6 @@ public interface SudokuResultService{
 	public int selectCount(SudokuResultModel sudokuResultModel);
 	
 	public SudokuResultModel selectByGame(Map map);
+	
+	public int getRank(Integer gameId, Long timestamp);
 }

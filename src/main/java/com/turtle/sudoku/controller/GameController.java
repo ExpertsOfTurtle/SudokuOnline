@@ -186,7 +186,7 @@ public class GameController {
 		srm.setUsetime((int)useTime);
 		srm.setGameMode(game.getGameMode());
 		srm.setDatetime(DateUtil.getDateTime());
-		srm.setTimestamp(System.currentTimeMillis());
+		srm.setTimestamp(curTime);
 		
 		sudokuResultService.create(srm);
 		

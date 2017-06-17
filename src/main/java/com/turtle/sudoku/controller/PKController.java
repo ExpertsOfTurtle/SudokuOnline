@@ -1,6 +1,8 @@
 package com.turtle.sudoku.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.turtle.sudoku.bean.ChatRequest;
 import com.turtle.sudoku.bean.ChatResponse;
 import com.turtle.sudoku.bean.CompleteRequest;
+import com.turtle.sudoku.bean.CompleteResponse;
 import com.turtle.sudoku.bean.JoinGameRequest;
 import com.turtle.sudoku.bean.JoinGameResponse;
 import com.turtle.sudoku.bean.RequestMessage;
@@ -25,7 +28,10 @@ import com.turtle.sudoku.bean.UserStatus;
 import com.turtle.sudoku.enums.MessageType;
 import com.turtle.sudoku.game.service.IGameService;
 import com.turtle.sudoku.model.GamesModel;
+import com.turtle.sudoku.model.SudokuResultModel;
 import com.turtle.sudoku.service.GamesService;
+import com.turtle.sudoku.service.SudokuResultService;
+import com.turtle.sudoku.service.SudokuService;
 import com.turtle.sudoku.util.StringUtil;
 
 import net.sf.json.JSONObject;
@@ -36,6 +42,9 @@ public class PKController extends WsController {
 			
 	@Autowired
 	private GamesService gameService = null;
+	
+	@Autowired
+	private SudokuResultService sudokuResultService = null;
 	
 	@Autowired
 	private IGameService redisGameService = null;
@@ -111,15 +120,41 @@ public class PKController extends WsController {
 		doResponse(topic, response);
 	}
 
-//	@MessageMapping("/complete")
-//	public void complete(CompleteRequest request) {
-//		logger.debug("{} complete the game [{}]", request.getUsername(), request.getGameId());
-//		
-//	}
+	@MessageMapping("/complete")
+	public void complete(CompleteRequest request) {
+		logger.debug("{} complete the game [{}]", request.getUsername(), request.getGameId());
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("gameid", request.getGameId());
+		map.put("username", request.getUsername());
+		SudokuResultModel srm = sudokuResultService.selectByGame(map);
+		
+		CompleteResponse response = new CompleteResponse();
+		response.setMessageType(request.getRequestType());
+		response.setUsername(request.getUsername());
+		if (srm != null) {
+			int rank = 1 + sudokuResultService.getRank(srm.getGameid(), srm.getTimestamp());
+			response.setRank(rank);
+			response.setUseTime(srm.getUsetime());
+			String result = String.format("(第%d名) 用时:%s", rank, formatUsetime(srm.getUsetime()/1000));
+			response.setResult(result);
+		} else {
+			response.setResult("此人怀疑作弊");
+		}
+		
+		String topic = String.format("/topic/game/%d", request.getGameId());
+		doResponse(topic, response);
+	}
 
 	@RequestMapping("/wf")
 	public String hello4() {
 
 		return "sudoku/index";
+	}
+	
+	private String formatUsetime(Integer usetime) {
+		int minute = usetime / 60;
+		int second = usetime % 60;
+		return String.format("%d'%d''", minute, second);
 	}
 }

@@ -1,6 +1,7 @@
 
 package com.turtle.sudoku.service.impl;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +99,15 @@ public class SudokuResultServiceImpl implements SudokuResultService {
 	public SudokuResultModel selectByGame(Map map) {
 		SudokuResult sr = sudokuResultRepo.selectByGame(map);
 		return BeanCopyUtils.map(sr, SudokuResultModel.class);
+	}
+
+
+	@Override
+	public int getRank(Integer gameId, Long timestamp) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("gameId", gameId);
+		map.put("timestamp", timestamp);
+		return sudokuResultRepo.getRank(map);
 	}
 
 

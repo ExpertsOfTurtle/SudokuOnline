@@ -286,6 +286,11 @@
     from sudoku_result
     where gameid = #{gameid,jdbcType=INTEGER} and username = #{username,jdbcType=VARCHAR} limit 1 
   </select>
+  <select id="getRank" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select count(1)
+    from sudoku_result
+    where timestamp &lt; #{timestamp,jdbcType=BIGINT} and gameId = #{gameId,jdbcType=INTEGER}
+  </select>
  </mapper>
   
 
