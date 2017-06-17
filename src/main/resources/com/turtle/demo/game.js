@@ -117,6 +117,10 @@ $(document).on('click', '#btn_save', function() {
 			$.toast('还没完成！');
 			return;
 		}
+		if (sd.CheckPuzzle(sd.getUserAnswer()) != true) {
+			$.toast('一般傻逼才会填错');
+			return;
+		}
 		if (GAME.completeTime == null) {
 			GAME.completeTime = new Date().getTime();
 		}
