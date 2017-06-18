@@ -334,7 +334,7 @@ SELECT LAST_INSERT_ID()
     select 
     <include refid="Base_Column_List" />
     from games
-    where status != 'E'
+    where status != 'E'  and  create_time >  UNIX_TIMESTAMP()*1000-3*3600*1000
     order by id desc limit 10;
   </select>
  </mapper>
