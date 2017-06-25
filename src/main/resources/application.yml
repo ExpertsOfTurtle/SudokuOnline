@@ -20,6 +20,12 @@ spring:
     pool.min-idle: 0
     pool.max-active: 8
     pool.max-wait: -1
+  velocity:
+    charset: UTF-8
+    properties.input.encoding: UTF-8
+    properties.output.encoding: UTF-8 
+    resourceLoaderPath: classpath:templates/
+    suffix: .vm
 server:
   port: 12002
   contextPath: /sudoku/
@@ -51,6 +57,12 @@ spring:
     pool.min-idle: 0
     pool.max-active: 8
     pool.max-wait: -1
+  velocity:
+    charset: UTF-8
+    properties.input.encoding: UTF-8
+    properties.output.encoding: UTF-8 
+    resourceLoaderPath: classpath:templates/
+    suffix: .vm
 server:
   port: 12002
   contextPath: /sudoku/
