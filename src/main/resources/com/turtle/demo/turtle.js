@@ -4,12 +4,29 @@ var GAME = {
 	level:null,
 	gameMode:null,
 	gameId:null,
+	gameStatus:null,
 	username:null,
 	startTime:null,
 	startGameTimer:null,
 	currentTime:null,
 	completeTime:null,
-	previousActionIndex:-1
+	previousActionIndex:-1,
+	socket:null
+}
+var RETRY = {
+	timeout: 1000,//60ms
+	timeoutObj: null,
+	reset: function(){
+	    clearTimeout(this.timeoutObj);
+	},
+	start: function(gid, status){
+		var self = this;
+		this.reset();
+		this.timeoutObj = setTimeout(function(){
+			console.log("Join game again:" + gid + "," + status);
+			joinGame(gid, status);
+		},this.timeout);
+	}
 }
 var stompClient = null;	//游戏内部的连接：聊天，对战过程
 function onCreateGame() {
@@ -73,11 +90,13 @@ function getAllGamesInfo() {
 }
 
 function joinGame(gid, status) {
+	GAME.gameId = gid;
+	GAME.gameStatus = status;
 	clearInterval(tm);
 	disconnectGame();
-	GAME.gameId = gid;
 	console.log("joining game:" + gid);
     var socket = new SockJS('/sudoku/endpointSang');
+    this.socket=socket;
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
 //        setConnected(true);
@@ -107,6 +126,10 @@ function joinGame(gid, status) {
         	GAME.startTime = new Date().getTime() + 5 * 1000;
     		GAME.startGameTimer = setInterval(onCountingTime,500);
         }
+        HEALTH.start();
+        /*socket.onclose=function(){
+        	RETRY.start(gid, status);
+        }*/
     });
     
 }
