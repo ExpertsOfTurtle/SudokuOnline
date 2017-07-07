@@ -110,6 +110,13 @@ public class PKController extends WsController {
 		response.setTimestamp(request.getTimestamp());
 		
 		GamesModel game = gameService.findByPrimaryKey(request.getGameId());
+		
+		//避免重复开始
+		if (game == null || "S".equals(game.getStatus())) {
+			logger.warn("Game not exist or game has begun");
+			return;
+		}
+		
 		GamesModel g = new GamesModel();
 		g.setId(game.getId());
 		g.setStatus("S");
