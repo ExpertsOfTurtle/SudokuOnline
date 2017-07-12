@@ -234,7 +234,7 @@ public class GameController {
 		if (level == null) {
 			throw new ValidationException("", "Level is null");
 		}
-		if (level <= 0 || level >= 20) {
+		if (level < 0 || level >= 20) {
 			throw new ValidationException("", "No such level");
 		}
 		return true;
