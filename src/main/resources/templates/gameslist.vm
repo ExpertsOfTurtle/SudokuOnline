@@ -1,5 +1,7 @@
 #macro(getLevel $level)
-	#if($level==11)
+	#if($level==0)
+		测试
+	#elseif($level==11)
 		初心级
 	#elseif($level==12)
 		入门级

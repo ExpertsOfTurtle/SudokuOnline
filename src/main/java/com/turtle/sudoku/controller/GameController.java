@@ -200,7 +200,8 @@ public class GameController {
 		sudokuResultService.create(srm);
 		
 		SudokuModel sudoku = sudokuService.findByPrimaryKey(game.getProblemid());
-		if (sudoku.getBestresult() == null || sudoku.getBestresult() > request.getUsetime()) {
+		if (sudoku.getLevel() != 0 && 
+				(sudoku.getBestresult() == null || sudoku.getBestresult() > request.getUsetime())) {
 			sudoku.setLastupdatetime(System.currentTimeMillis());
 			sudoku.setBestresult(request.getUsetime());
 			sudokuService.updateTimeAndResult(sudoku);
