@@ -132,7 +132,7 @@ $(document).on('click', '#btn_save', function() {
 			'username' : GAME.username,
 			'answer' : _userSolver
 		};
-		
+		$.toast('正在发送给服务器');
 		$.ajax({
 			url : "/sudoku/game/complete",
 			data : json_data,

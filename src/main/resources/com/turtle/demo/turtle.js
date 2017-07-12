@@ -90,6 +90,7 @@ function getAllGamesInfo() {
 }
 
 function joinGame(gid, status) {
+	$.toast('欢迎进入游戏');
 	GAME.gameId = gid;
 	GAME.gameStatus = status;
 	clearInterval(tm);
