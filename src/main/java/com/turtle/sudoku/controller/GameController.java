@@ -7,7 +7,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -19,16 +21,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 import com.turtle.sudoku.bean.CompleteRequest;
+import com.turtle.sudoku.bean.CompleteResponse;
 import com.turtle.sudoku.bean.CreateGameRequest;
 import com.turtle.sudoku.bean.ErrorResponse;
+import com.turtle.sudoku.bean.SudokuActivity;
 import com.turtle.sudoku.enums.GameMode;
+import com.turtle.sudoku.enums.SudokuLevel;
 import com.turtle.sudoku.exception.SudokuException;
 import com.turtle.sudoku.exception.ValidationException;
+import com.turtle.sudoku.model.ActivityModel;
 import com.turtle.sudoku.model.GamesModel;
 import com.turtle.sudoku.model.SudokuModel;
 import com.turtle.sudoku.model.SudokuResultModel;
 import com.turtle.sudoku.service.GamesService;
+import com.turtle.sudoku.service.HttpService;
 import com.turtle.sudoku.service.SudokuResultService;
 import com.turtle.sudoku.service.SudokuService;
 import com.turtle.sudoku.util.DateUtil;
@@ -47,6 +55,14 @@ public class GameController {
 	
 	@Autowired
 	private GamesService gameService = null;
+	
+	@Autowired
+	private HttpService httpService;
+	
+	@Value("${url.turtlebone-core}")
+	private String TURTLEBONE_CORE_URL;
+	@Autowired
+	private Environment env;
 	
 	@Autowired
 	private SudokuResultService sudokuResultService = null;
@@ -197,6 +213,9 @@ public class GameController {
 		srm.setDatetime(DateUtil.getDateTime());
 		srm.setTimestamp(curTime);
 		
+		int rank = 1 + sudokuResultService.getRank(srm.getGameid(), srm.getTimestamp());
+		srm.setRank(rank);
+		
 		sudokuResultService.create(srm);
 		
 		SudokuModel sudoku = sudokuService.findByPrimaryKey(game.getProblemid());
@@ -206,6 +225,8 @@ public class GameController {
 			sudoku.setBestresult(request.getUsetime());
 			sudokuService.updateTimeAndResult(sudoku);
 		}
+		
+		sendSudokuAcitivty(srm, game);
 		
 		return ResponseEntity.ok(srm);
 	}
@@ -230,6 +251,17 @@ public class GameController {
 		} else {
 			throw new ValidationException("", "Username error");
 		}
+	}
+	private SudokuLevel getLevel(Integer level) {
+		SudokuLevel rs = SudokuLevel.TEST;
+		if (level != null) {
+			for (SudokuLevel sl : SudokuLevel.values()) {
+				if (level.intValue() == sl.getValue().intValue()) {
+					return sl;
+				}
+			}	
+		}		
+		return rs;
 	}
 	private boolean validateLevel(Integer level) throws ValidationException {
 		if (level == null) {
@@ -256,5 +288,28 @@ public class GameController {
 			}
 		}
 		throw new ValidationException("", "gameMode is not valid");
+	}
+	private void sendSudokuAcitivty(SudokuResultModel srm, GamesModel gm) {
+		SudokuActivity sudokuActivity = new SudokuActivity();
+		sudokuActivity.setDatetime(srm.getDatetime());
+		sudokuActivity.setGameId(srm.getGameid());
+		sudokuActivity.setLevel(getLevel(srm.getLevel()));
+		sudokuActivity.setProblemId(gm.getProblemid());
+		sudokuActivity.setRank(srm.getRank());
+		sudokuActivity.setUsername(srm.getUsername());
+		sudokuActivity.setUsetime(srm.getUsetime());
+		String body = JSON.toJSONString(sudokuActivity);
+		
+		Map<String, String> header = new HashMap<>();
+		header.put("Content-Type", "application/json");
+
+		String url = TURTLEBONE_CORE_URL + "/activity/sudoku";
+		ActivityModel activity = httpService.sendAndGetResponse(url, header, body,
+				ActivityModel.class);
+	}
+	private String formatUsetime(Integer usetime) {
+		int minute = usetime / 60;
+		int second = usetime % 60;
+		return String.format("%d'%d''", minute, second);
 	}
 }

@@ -140,7 +140,7 @@ public class PKController extends WsController {
 		response.setMessageType(request.getRequestType());
 		response.setUsername(request.getUsername());
 		if (srm != null) {
-			int rank = 1 + sudokuResultService.getRank(srm.getGameid(), srm.getTimestamp());
+			int rank = srm.getRank();
 			response.setRank(rank);
 			response.setUseTime(srm.getUsetime());
 			String result = String.format("(第%d名) 用时:%s", rank, formatUsetime(srm.getUsetime()/1000));

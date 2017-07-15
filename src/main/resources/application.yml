@@ -33,6 +33,8 @@ mybatis:
   mapperLocations: classpath:mapper/*.xml
   #mapperLocations: classpath:com/turtle/sudoku/entity/*.xml
 redis.expireTime: 60
+url:
+  turtlebone-core: http://127.0.0.1:12003/core
 ---
 spring:
   profiles: prod
@@ -70,3 +72,5 @@ mybatis:
   mapperLocations: classpath:mapper/*.xml
   #mapperLocations: classpath:com/turtle/sudoku/entity/*.xml
 redis.expireTime: 3600
+url:
+  turtlebone-core: http://www.turtlebone.top:12003/core
