@@ -2,15 +2,15 @@ package com.turtle.sudoku.enums;
 
 public enum SudokuLevel {
 	TEST(0, "测试"),
-	SUPER_EASY(1, "初心级"),
-	VERY_EASY(2, "入门级"),
-	EASY(3, "初级"),
-	MEDIUM(4, "中级"),
-	HARD(5, "高级"),
-	VERY_HARD(6, "超高级"),
-	INSANE(7, "轻度骨灰级"),
-	VERY_INSANE(8, "中度骨灰级"),
-	SUPER_INSANE(9, "重度骨灰级")
+	SUPER_EASY(11, "初心级"),
+	VERY_EASY(12, "入门级"),
+	EASY(13, "初级"),
+	MEDIUM(14, "中级"),
+	HARD(15, "高级"),
+	VERY_HARD(16, "超高级"),
+	INSANE(17, "轻度骨灰级"),
+	VERY_INSANE(18, "中度骨灰级"),
+	SUPER_INSANE(19, "重度骨灰级")
 	;
 	
 	private Integer value;
