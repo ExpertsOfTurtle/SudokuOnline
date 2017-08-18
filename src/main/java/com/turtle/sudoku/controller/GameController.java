@@ -49,12 +49,12 @@ public class GameController {
 	
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
-	
 	@Autowired
-	private SudokuService sudokuService = null;
-	
+	private SudokuService sudokuService;
 	@Autowired
-	private GamesService gameService = null;
+	private GamesService gameService;
+	@Autowired
+	private SudokuResultService sudokuResultService;
 	
 	@Autowired
 	private HttpService httpService;
@@ -64,8 +64,6 @@ public class GameController {
 	@Autowired
 	private Environment env;
 	
-	@Autowired
-	private SudokuResultService sudokuResultService = null;
 	
 	@RequestMapping(value="/create/{username}/username")
 	public @ResponseBody ResponseEntity<?> queryByProductIdList(@PathVariable("username") String username) {
@@ -229,6 +227,15 @@ public class GameController {
 		sendSudokuAcitivty(srm, game);
 		
 		return ResponseEntity.ok(srm);
+	}
+	
+	@RequestMapping(value="/querySudokuResult/{id}")
+	public @ResponseBody ResponseEntity<?> querySudokuResult(@PathVariable("id") Integer id) {
+		logger.debug("id={}", id);
+		
+		SudokuResultModel sudokuResultModel = sudokuResultService.findByPrimaryKey(id);
+		
+		return ResponseEntity.ok(sudokuResultModel);
 	}
 	
 	
