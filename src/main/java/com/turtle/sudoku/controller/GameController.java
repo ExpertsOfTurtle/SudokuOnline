@@ -311,8 +311,13 @@ public class GameController {
 		header.put("Content-Type", "application/json");
 
 		String url = TURTLEBONE_CORE_URL + "/activity/sudoku";
-		ActivityModel activity = httpService.sendAndGetResponse(url, header, body,
-				ActivityModel.class);
+		try {
+			ActivityModel activity = httpService.sendAndGetResponse(url, header, body,
+					ActivityModel.class);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	private String formatUsetime(Integer usetime) {
 		int minute = usetime / 60;

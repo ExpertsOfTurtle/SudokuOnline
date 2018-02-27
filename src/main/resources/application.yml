@@ -52,7 +52,7 @@ spring:
     validationQuery: select 'x'
   redis:
     database: 0
-    hostName: turtlebone.xyz
+    hostName: 127.0.0.1
     port: 6379
     pool.max-idle: 8
     pool.min-idle: 0
