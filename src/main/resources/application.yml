@@ -34,7 +34,7 @@ mybatis:
   #mapperLocations: classpath:com/turtle/sudoku/entity/*.xml
 redis.expireTime: 60
 url:
-  turtlebone-core: http://127.0.0.1:12003/core
+  turtlebone-core: http://127.0.0.1/core
 ---
 spring:
   profiles: prod
@@ -52,8 +52,7 @@ spring:
     validationQuery: select 'x'
   redis:
     database: 0
-    hostName: r-wz9dbc5c7dc742e4.redis.rds.aliyuncs.com
-    password: Turtle2017
+    hostName: turtlebone.xyz
     port: 6379
     pool.max-idle: 8
     pool.min-idle: 0
@@ -73,4 +72,4 @@ mybatis:
   #mapperLocations: classpath:com/turtle/sudoku/entity/*.xml
 redis.expireTime: 3600
 url:
-  turtlebone-core: http://www.turtlebone.top:12003/core
+  turtlebone-core: http://127.0.0.1/core
