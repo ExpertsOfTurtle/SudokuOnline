@@ -179,23 +179,50 @@ function select_menu() {
 			say('你能快一点吗？？');
 		}
 	}, {
-		text : '我错了~~~',
+		text : '我错了',
 		bold : true,
 		onClick : function() {
-			say('我错了~~~');
+			say('我错了');
 		}
 	}, {
-		text : '我去睡了',
+		text : '原来你数独这么烂的！',
+		bold : true,
+		onClick : function() {
+			say('原来你数独这么烂的！');
+		}
+	}, {
+		text : '我故意填错了，重来',
+		bold : true,
+		onClick : function() {
+			say('我故意填错了，重来');
+		}
+	}, {
+		text : '我去睡了,你慢慢',
 		bold : true,
 		onClick : function() {
 			say('我去睡了,你慢慢');
 		}
+	},  {
+		text : '滚',
+		bold : true,
+		onClick : function() {
+			say('滚');
+		}
+	},{
+		text : '求你快点，我赶时间',
+		bold : true,
+		onClick : function() {
+			say('求你快点，我赶时间');
+		}
+	}, {
+		text : 'Cancel',
+		bg : 'danger'
 	}];
 	var buttons2 = [ {
 		text : '取消',
 		bg : 'danger'
 	} ];
-	var groups = [ buttons1, buttons2 ];
+	var groups = [ buttons1];
 	$.actions(groups);
 }
 $(document).on('click', '.btn_option', function() {
