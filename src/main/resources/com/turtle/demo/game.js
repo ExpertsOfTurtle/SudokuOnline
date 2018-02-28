@@ -165,42 +165,32 @@ $(document).on('click', '#btn_save', function() {
 	}
 });
 function select_menu() {
-	var buttons1 = [ {
-		text : '请选择',
-		label : true
-	}, {
-		text : '数独 - 入门级',
+	var buttons1 = [  {
+		text : "女警官",
 		bold : true,
 		color : 'success',
 		onClick : function() {
-			// $.alert("你选择了“重做“");
-			location.href = '/sudoku/sudoku-3x3-0.html?level=1';
+			say("女警官");
 		}
 	}, {
-		text : '数独 - 初级',
+		text : '你能快一点吗？？',
 		bold : true,
 		onClick : function() {
-			location.href = '/sudoku/sudoku-3x3-0.html?level=2';
+			say('你能快一点吗？？');
 		}
 	}, {
-		text : '数独 - 中级',
+		text : '我错了~~~',
 		bold : true,
 		onClick : function() {
-			location.href = '/sudoku/sudoku-3x3-0.html?level=3';
+			say('我错了~~~');
 		}
 	}, {
-		text : '数独 - 高级',
+		text : '我去睡了',
 		bold : true,
 		onClick : function() {
-			location.href = '/sudoku/sudoku-3x3-0.html?level=4';
+			say('我去睡了,你慢慢');
 		}
-	}, {
-		text : '数独 - 骨灰级',
-		bold : true,
-		onClick : function() {
-			location.href = '/sudoku/sudoku-3x3-0.html?level=5';
-		}
-	} ];
+	}];
 	var buttons2 = [ {
 		text : '取消',
 		bg : 'danger'
@@ -209,6 +199,5 @@ function select_menu() {
 	$.actions(groups);
 }
 $(document).on('click', '.btn_option', function() {
-	$.toast('你全家都善良');
-	//select_menu();
+	select_menu();
 });

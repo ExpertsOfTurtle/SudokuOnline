@@ -119,12 +119,14 @@ function joinGame(gid, status) {
         		updateStatus(bd);
         	} else if (bd.messageType == "Complete") {
         		complete(bd);
+        	} else if (bd.messageType == "Say") {
+        		showSay(bd);
         	}
         });
         doJoin();
         if (status == "S") {
         	$("#btnStart").attr("disabled","disabled")
-        	GAME.startTime = new Date().getTime() + 5 * 1000;
+        	GAME.startTime = new Date().getTime() + 1 * 1000;
     		GAME.startGameTimer = setInterval(onCountingTime,500);
         }
         HEALTH.start();
@@ -167,6 +169,15 @@ function chat() {
 		"requestType":"Chat"
 	};
 	stompClient.send("/chat", {}, JSON.stringify(obj));
+}
+function say(text) {
+	var obj = {
+		"username":$('input[name="user"]:checked').val(),
+		"message":text,
+		"gameId":GAME.gameId,
+		"requestType":"Say"
+	};
+	stompClient.send("/say", {}, JSON.stringify(obj));
 }
 function doJoin() {
 	var msg = $("#text").val();
@@ -253,6 +264,10 @@ function showResponse(obj) {
     var msg = obj.username + ":" + obj.message + "<br>" + $("#chat").html();
     console.log("msg:" + msg);
     $("#chat").html(msg)
+}
+function showSay(obj) {
+	var msg = obj.username + ":" + obj.message;
+	$.toast(msg);
 }
 function welcomeJoin(obj) {
 	console.log(obj);

@@ -102,6 +102,19 @@ public class PKController extends WsController {
 		doResponse(topic, response);
 	}
 	
+	@MessageMapping("/say")
+	public void say(ChatRequest request) {
+		logger.debug("I'm Saying, from {}, msg={}, gameId={}", 
+				request.getUsername(), request.getMessage(), request.getGameId());
+		System.out.println(request.getRequestType());
+		ChatResponse response = new ChatResponse();
+		response.setMessage(request.getMessage());
+		response.setUsername(request.getUsername());
+		response.setMessageType(request.getRequestType());
+		String topic = String.format("/topic/game/%d", request.getGameId());
+		doResponse(topic, response);
+	}
+	
 	@MessageMapping("/start")
 	public void start(StartGameRequest request) {
 		logger.debug("{} start the game [{}]", request.getUsername(), request.getGameId());
