@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
+import com.turtle.sudoku.bean.SudokuBoard;
 import com.turtle.sudoku.bean.UserStatus;
 import com.turtle.sudoku.game.service.IGameService;
 import com.turtle.sudoku.game.service.IRedisService;
@@ -90,6 +92,11 @@ public class GameServiceImpl implements IGameService {
 	}
 
 	@Override
+	public void extendGame(Integer gameId) {
+		String key = buildGameKey(gameId);
+		redisService.expire(key, expireTimeInteger);
+	}
+	@Override
 	public String appendUserAction(Integer gameId, String username, String details) {
 		String key = buildUserActionKey(gameId, username);
 	/*	String str = redisService.get(key);
@@ -111,4 +118,21 @@ public class GameServiceImpl implements IGameService {
 		String key = String.format("Game_%d_User_%s", gameId, username);
 		return key;
 	}
+
+	@Override
+	public SudokuBoard getBoard(Integer gameId) {
+		String key = String.format("GameBoard_%d", gameId);
+		String value = redisService.get(key);
+		SudokuBoard sb = JSON.parseObject(value, SudokuBoard.class);
+		return sb;
+	}
+
+	@Override
+	public void setBoard(SudokuBoard board, Integer gameId) {
+		String key = String.format("GameBoard_%d", gameId);
+		String value = JSON.toJSONString(board);
+		redisService.set(key, value);
+		redisService.expire(key, expireTimeInteger);
+	}
+
 }

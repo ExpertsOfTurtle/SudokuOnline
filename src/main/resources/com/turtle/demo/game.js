@@ -172,49 +172,7 @@ function select_menu() {
 		onClick : function() {
 			say("女警官");
 		}
-	}, {
-		text : '你能快一点吗？？',
-		bold : true,
-		onClick : function() {
-			say('你能快一点吗？？');
-		}
-	}, {
-		text : '我错了',
-		bold : true,
-		onClick : function() {
-			say('我错了');
-		}
-	}, {
-		text : '原来你数独这么烂的！',
-		bold : true,
-		onClick : function() {
-			say('原来你数独这么烂的！');
-		}
-	}, {
-		text : '我故意填错了，重来',
-		bold : true,
-		onClick : function() {
-			say('我故意填错了，重来');
-		}
-	}, {
-		text : '我去睡了,你慢慢',
-		bold : true,
-		onClick : function() {
-			say('我去睡了,你慢慢');
-		}
-	},  {
-		text : '滚',
-		bold : true,
-		onClick : function() {
-			say('滚');
-		}
-	},{
-		text : '求你快点，我赶时间',
-		bold : true,
-		onClick : function() {
-			say('求你快点，我赶时间');
-		}
-	}, {
+	} {
 		text : 'Cancel',
 		bg : 'danger'
 	}];

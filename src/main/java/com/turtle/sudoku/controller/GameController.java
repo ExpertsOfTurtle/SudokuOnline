@@ -27,10 +27,13 @@ import com.turtle.sudoku.bean.CompleteResponse;
 import com.turtle.sudoku.bean.CreateGameRequest;
 import com.turtle.sudoku.bean.ErrorResponse;
 import com.turtle.sudoku.bean.SudokuActivity;
+import com.turtle.sudoku.bean.SudokuBoard;
 import com.turtle.sudoku.enums.GameMode;
 import com.turtle.sudoku.enums.SudokuLevel;
 import com.turtle.sudoku.exception.SudokuException;
 import com.turtle.sudoku.exception.ValidationException;
+import com.turtle.sudoku.game.service.IGameService;
+import com.turtle.sudoku.game.service.SamuraiSudokuService;
 import com.turtle.sudoku.model.ActivityModel;
 import com.turtle.sudoku.model.GamesModel;
 import com.turtle.sudoku.model.SudokuModel;
@@ -52,9 +55,13 @@ public class GameController {
 	@Autowired
 	private SudokuService sudokuService;
 	@Autowired
+	private SamuraiSudokuService samuraiSudokuService;
+	@Autowired
 	private GamesService gameService;
 	@Autowired
 	private SudokuResultService sudokuResultService;
+	@Autowired
+	private IGameService redisGameService = null;
 	
 	@Autowired
 	private HttpService httpService;
@@ -73,8 +80,6 @@ public class GameController {
 		
 		return ResponseEntity.ok(sudokuModel);
 	}
-	
-
 	
 	/*
 	 * 创建游戏
@@ -117,10 +122,27 @@ public class GameController {
 		gm.setId(rt);
 		System.out.println("id=" + rt);
 		
+		if (gm.getLevel() == 20) {
+			//针对武士数独（五连体数独）
+			SudokuBoard board = new SudokuBoard(1);
+			SudokuModel sudoku = sudokuService.selectByGameId(gm.getId());
+			String problem = sudoku.getProblem();
+			if (board.updateBoard(problem)) {
+				redisGameService.setBoard(board, gm.getId());
+			} else {
+				logger.error("Update sudoku board FAIL");
+			}
+		}
+		
 		//广播：创建游戏
 		messagingTemplate.convertAndSend("/topic/create", gm);
 		
 		return ResponseEntity.ok(gm);
+	}
+	@RequestMapping(value="/queryBoard/{gameId}")
+	public @ResponseBody ResponseEntity<?> queryBoard(@PathVariable Integer gameId) {
+		SudokuBoard board = redisGameService.getBoard(gameId);
+		return ResponseEntity.ok(board);
 	}
 	
 	@RequestMapping(value="/queryGame")
@@ -256,7 +278,8 @@ public class GameController {
 		if ("could".equalsIgnoreCase(username) || "dfs".equalsIgnoreCase(username)) {
 			return true;
 		} else {
-			throw new ValidationException("", "Username error");
+//			throw new ValidationException("", "Username error");
+			return true;
 		}
 	}
 	private SudokuLevel getLevel(Integer level) {
@@ -274,7 +297,7 @@ public class GameController {
 		if (level == null) {
 			throw new ValidationException("", "Level is null");
 		}
-		if (level < 0 || level >= 20) {
+		if (level < 0 || level > 20) {
 			throw new ValidationException("", "No such level");
 		}
 		return true;
