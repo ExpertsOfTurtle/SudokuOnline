@@ -129,6 +129,7 @@ public class GameServiceImpl implements IGameService {
 
 	@Override
 	public void setBoard(SudokuBoard board, Integer gameId) {
+//		logger.debug("gameId={}, setBoard", gameId);
 		String key = String.format("GameBoard_%d", gameId);
 		String value = JSON.toJSONString(board);
 		redisService.set(key, value);

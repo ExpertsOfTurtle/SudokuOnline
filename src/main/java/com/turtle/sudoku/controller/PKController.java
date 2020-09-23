@@ -130,14 +130,10 @@ public class PKController extends WsController {
 	@MessageMapping("/lock")
 	public void lock(LockRequest request) {
 		if (request.getLockType() == 1) {
-			logger.debug("{} unlock the position [{}, {}] @ game [{}]", request.getUsername(), request.getX(),
-					request.getY(), request.getGameId());
-			
+//			logger.debug("{} unlock the position [{}, {}] @ game [{}]", request.getUsername(), request.getX(), request.getY(), request.getGameId());	
 			samuraiSudokuService.dispatch(1, request.getUsername(), request.getGameId(), request.getX(), request.getY(), "");
 		} else {
-			logger.debug("{} lock the position [{}, {}] @ game [{}]", request.getUsername(), request.getX(),
-					request.getY(), request.getGameId());
-			
+//			logger.debug("{} lock the position [{}, {}] @ game [{}]", request.getUsername(), request.getX(), request.getY(), request.getGameId());
 			samuraiSudokuService.dispatch(0, request.getUsername(), request.getGameId(), request.getX(), request.getY(), "");
 		}
 		
@@ -158,12 +154,17 @@ public class PKController extends WsController {
 	 * */
 	@MessageMapping("/set")
 	public void set(SetValueRequest request) {
+		boolean flag = false;
 		if (request.getSetType() == 0) {
 //			logger.debug("{} set value @ position [{}, {}] @ game [{}]", request.getUsername(), request.getX(), request.getY(), request.getGameId());
-			samuraiSudokuService.dispatch(2, request.getUsername(), request.getGameId(), request.getX(), request.getY(), request.getValue());
+			flag = samuraiSudokuService.dispatch(2, request.getUsername(), request.getGameId(), request.getX(), request.getY(), request.getValue());
 		} else {
 //			logger.debug("{} clean value @ position [{}, {}] @ game [{}]", request.getUsername(), request.getX(), request.getY(), request.getGameId());	
-			samuraiSudokuService.dispatch(3, request.getUsername(), request.getGameId(), request.getX(), request.getY(), "");
+			flag = samuraiSudokuService.dispatch(3, request.getUsername(), request.getGameId(), request.getX(), request.getY(), "");
+		}
+		
+		if (!flag) {
+			return;
 		}
 		
 		SetValueResponse response = new SetValueResponse();

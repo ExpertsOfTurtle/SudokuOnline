@@ -27,22 +27,28 @@ public class SamuraiSudokuServiceImpl implements SamuraiSudokuService {
 
 	@Override
 	public boolean dispatch(Integer type, String username, Integer gameId, int x, int y, String value) {
-		synchronized (arr[gameId % N]) {
+		boolean flag = false;
+		synchronized (arr[gameId % N]) {			
+//			logger.info("[START][{}][{}][({},{}),{}]",username, type, x, y, value);
 			switch (type) {
 			case 0:
-				return lock(username, gameId, x, y);
+				flag = lock(username, gameId, x, y);
+				break;
 			case 1:
-				return unlock(username, gameId, x, y);
+				flag = unlock(username, gameId, x, y);
+				break;
 			case 2:
-				return setValue(username, gameId, x, y, value);
+				flag = setValue(username, gameId, x, y, value);
+				break;
 			case 3:
-				return cleanValue(username, gameId, x, y);
+				flag = cleanValue(username, gameId, x, y);
+				break;
 			default:
-				
 				break;
 			}
+//			logger.info("[END  ][{}][{}][({},{}),{}] - {}",username, type, x, y, value, flag);
 		}
-		return false;
+		return flag;
 	}
 	
 
@@ -52,8 +58,9 @@ public class SamuraiSudokuServiceImpl implements SamuraiSudokuService {
 		boolean flag = board.lock(x, y, username);
 		if (flag) {
 			gameService.setBoard(board, gameId);
+//			logger.warn("[{}] lock ({},{})", username, x, y);
 		} else {
-			logger.warn("[{}] lock ({},{}) fail", username, x, y);
+//			logger.warn("[{}] fail to lock ({},{})", username, x, y);
 		}
 		return flag;
 	}
@@ -64,8 +71,9 @@ public class SamuraiSudokuServiceImpl implements SamuraiSudokuService {
 		boolean flag = board.unlock(x, y, username);
 		if (flag) {
 			gameService.setBoard(board, gameId);
+//			logger.warn("[{}] unlock ({},{})", username, x, y);
 		} else {
-			logger.warn("[{}] unlock ({},{}) fail", username, x, y);
+//			logger.warn("[{}] fail to unlock ({},{})", username, x, y);
 		}
 		return flag;
 	}

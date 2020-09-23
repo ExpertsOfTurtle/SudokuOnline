@@ -1,5 +1,11 @@
 package com.turtle.sudoku.bean;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+
+import com.turtle.sudoku.util.DateUtil;
 import com.turtle.sudoku.util.StringUtil;
 
 public class SudokuBoard {
@@ -22,8 +28,15 @@ public class SudokuBoard {
 	 * 1 - 武士数独（五连体数独）
 	 * */
 	private int sudokuType;
+	private String startDateTime;
+	private long startMillis;
+	private long endMillis;
+	private String endDateTime;
+	private Map<String, Boolean> userMap;
 	public SudokuBoard() {
-		
+		startMillis = System.currentTimeMillis();
+		startDateTime = DateUtil.format(startMillis, "yyyy-MM-dd HH:mm:ss");
+		userMap = new HashMap<>();
 	}
 	public SudokuBoard(int type) {
 		sudokuType = type;
@@ -61,18 +74,23 @@ public class SudokuBoard {
 		return true;
 	}
 	public boolean lock(int x, int y, String username) {
+		userMap.put(username, true);
+		if (StringUtil.isEmpty(board[x][y].owner)) {
+			board[x][y].owner = username;
+		} else {
+			return false;
+		}
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j <board[i].length; j++) {
 				if (board[i][j].owner.equals(username)) {
-					return false;
+					board[i][j].owner = "";
 				}
 			}
 		}
 		if (StringUtil.isEmpty(board[x][y].owner)) {
 			board[x][y].owner = username;
-			return true;
 		}
-		return false;
+		return true;
 	}
 	public boolean unlock(int x, int y, String username) {
 		if (username.equals(board[x][y].owner)) {
@@ -111,6 +129,76 @@ public class SudokuBoard {
 			}
 		}
 	}
+	public boolean verify() {
+		if (sudokuType == 0) {
+			return verifyNormal(0, 0);
+		} else if (sudokuType == 1) {
+			for (int i = 0; i < startPoint.length; i++) {
+				int x = startPoint[i][0];
+				int y = startPoint[i][1];
+				if (!verifyNormal(x, y)) {
+					return false;
+				}
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+	private boolean verifyNormal(int dx, int dy) {
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				String v = board[i][j].value;
+				if (v.length() != 1 || !StringUtils.isNumeric(v)) {
+					return false;
+				}
+			}
+		}
+		//每一行
+		for (int i = 0; i < 9; i++) {
+			boolean b[] = new boolean[9];
+			for (int j = 0; j < 9; j++) {
+				int k = Integer.parseInt(board[i][j].value);
+				b[k-1]=true;
+			}
+			for (i = 0; i < 9; i++) {
+				if (!b[i]) {
+					return false;
+				}
+			}
+		}
+		//每一列
+		for (int i = 0; i < 9; i++) {
+			boolean b[] = new boolean[9];
+			for (int j = 0; j < 9; j++) {
+				int k = Integer.parseInt(board[j][i].value);
+				b[k-1]=true;
+			}
+			for (i = 0; i < 9; i++) {
+				if (!b[i]) {
+					return false;
+				}
+			}
+		}
+		//每一块
+		for (int i = 0; i < 3; i+=3) {
+			for (int j = 0; j <3; j+=3) {
+				boolean b[] = new boolean[9];
+				for (int x = 0; x < 3; x++) {
+					for (int y = 0; y < 3; y++) {
+						int k = Integer.parseInt(board[i+x][j+y].value);
+						b[k-1]=true;
+					}
+				}
+				for (i = 0; i < 9; i++) {
+					if (!b[i]) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
 	private void buildSamurai() {
 		board = new SudokuCell[21][21];
 		for (int i = 0; i < 21; i++) {
@@ -131,6 +219,12 @@ public class SudokuBoard {
 			}
 		}
 	}
+	public Map<String, Boolean> getUserMap() {
+		return userMap;
+	}
+	public void setUserMap(Map<String, Boolean> userMap) {
+		this.userMap = userMap;
+	}
 	public SudokuCell[][] getBoard() {
 		return board;
 	}
@@ -142,5 +236,29 @@ public class SudokuBoard {
 	}
 	public void setSudokuType(int sudokuType) {
 		this.sudokuType = sudokuType;
+	}
+	public String getStartDateTime() {
+		return startDateTime;
+	}
+	public void setStartDateTime(String startDateTime) {
+		this.startDateTime = startDateTime;
+	}
+	public long getStartMillis() {
+		return startMillis;
+	}
+	public void setStartMillis(long startMillis) {
+		this.startMillis = startMillis;
+	}
+	public long getEndMillis() {
+		return endMillis;
+	}
+	public void setEndMillis(long endMillis) {
+		this.endMillis = endMillis;
+	}
+	public String getEndDateTime() {
+		return endDateTime;
+	}
+	public void setEndDateTime(String endDateTime) {
+		this.endDateTime = endDateTime;
 	}
 }

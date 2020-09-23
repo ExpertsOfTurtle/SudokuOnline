@@ -14,8 +14,8 @@ import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 
 public class SendEmail {
-	private static final String ACCESS_KEY = "LTAIv5K5cvw46q0U";
-	private static final String SECRET = "WEG1KpNAu8hYbrv7YHu1fHyouBQHAF";
+	private static final String ACCESS_KEY = "";
+	private static final String SECRET = "";
 
 	@Test
 	public void sample() {

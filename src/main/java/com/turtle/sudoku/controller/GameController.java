@@ -3,6 +3,7 @@ package com.turtle.sudoku.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ import com.turtle.sudoku.bean.CreateGameRequest;
 import com.turtle.sudoku.bean.ErrorResponse;
 import com.turtle.sudoku.bean.SudokuActivity;
 import com.turtle.sudoku.bean.SudokuBoard;
+import com.turtle.sudoku.bean.VerifyResponse;
 import com.turtle.sudoku.enums.GameMode;
 import com.turtle.sudoku.enums.SudokuLevel;
 import com.turtle.sudoku.exception.SudokuException;
@@ -154,6 +156,44 @@ public class GameController {
 		return "gameslist";
 	}
 	
+	@RequestMapping(value="/verifyResult")
+	public @ResponseBody ResponseEntity<?> verifyResult(@RequestBody CompleteRequest request) {
+		Integer gameId = request.getGameId();
+		String username = request.getUsername();
+		SudokuBoard board = redisGameService.getBoard(gameId);
+		boolean rs = board.verify();
+		
+		VerifyResponse response = new VerifyResponse();
+		response.setMessageType("Verify");
+		if (rs) {
+			response.setResult("YES");
+			long s = board.getStartMillis();
+			long e = System.currentTimeMillis();
+			long diff = (e - s) / 1000;
+			long hour = diff / 3600;
+			diff %= 3600;
+			long minute = diff / 60;
+			long second = diff % 60;
+			response.setHour(hour);
+			response.setMinute(minute);
+			response.setSecond(second);
+			response.setStartTime(board.getStartDateTime());
+			response.setEndTime(DateUtil.format(e, "yyyy-MM-dd HH:mm:ss"));
+			response.setUsername(username);
+			
+			board.setEndMillis(e);
+			board.setEndDateTime(response.getEndTime());
+			redisGameService.setBoard(board, gameId);
+		} else {
+			response.setUsername(username);
+			response.setResult("NO");
+		}
+		
+		String topic = String.format("/topic/game/%d", gameId);
+		messagingTemplate.convertAndSend(topic, JSON.toJSONString(response));
+		return ResponseEntity.ok(response);
+	}
+	
 	/*
 	 * 查询所有已经创建，还没开始的游戏
 	 * */
@@ -220,6 +260,13 @@ public class GameController {
 		SudokuResultModel srm = sudokuResultService.selectByGame(map);
 		if (srm != null) {
 			return ResponseEntity.ok(srm);
+		}
+		
+		if (game.getLevel() == 20) {
+			//五连体数独
+			SudokuResultModel rs = completeSamuraiSudoku(game.getId());
+			sendSudokuAcitivty(rs, game);
+			return ResponseEntity.ok(rs);
 		}
 		
 		srm = new SudokuResultModel();
@@ -346,5 +393,39 @@ public class GameController {
 		int minute = usetime / 60;
 		int second = usetime % 60;
 		return String.format("%d'%d''", minute, second);
+	}
+	private SudokuResultModel completeSamuraiSudoku(Integer gameId) {
+		SudokuBoard board = redisGameService.getBoard(gameId);
+		StringBuffer users = new StringBuffer();
+		for (Entry<String, Boolean> entry : board.getUserMap().entrySet()) {
+			users.append(",").append(entry.getKey());
+			
+			SudokuResultModel srm = new SudokuResultModel();
+			srm.setGameid(gameId);
+			srm.setLevel(20);
+			srm.setUsername(entry.getKey());
+			srm.setDetails("");
+			long useTime = board.getEndMillis() - board.getStartMillis();
+			srm.setUsetime((int)useTime);
+			srm.setGameMode(GameMode.Cooperation.getValue());
+			srm.setDatetime(board.getEndDateTime());
+			srm.setTimestamp(board.getEndMillis());
+			srm.setRank(1);
+			sudokuResultService.create(srm);
+		}
+		String username = users.substring(1);
+		SudokuResultModel srm = new SudokuResultModel();
+		srm.setGameid(gameId);
+		srm.setLevel(20);
+		srm.setUsername(username);
+		srm.setDetails("");
+		long useTime = board.getEndMillis() - board.getStartMillis();
+		srm.setUsetime((int)useTime);
+		srm.setGameMode(GameMode.Cooperation.getValue());
+		srm.setDatetime(board.getEndDateTime());
+		srm.setTimestamp(board.getEndMillis());
+		srm.setRank(1);
+		sudokuResultService.create(srm);
+		return srm;
 	}
 }

@@ -32,7 +32,7 @@ server:
 mybatis:
   mapperLocations: classpath:mapper/*.xml
   #mapperLocations: classpath:com/turtle/sudoku/entity/*.xml
-redis.expireTime: 3600
+redis.expireTime: 25200
 url:
   turtlebone-core: http://127.0.0.1/core
 ---
@@ -70,6 +70,6 @@ server:
 mybatis:
   mapperLocations: classpath:mapper/*.xml
   #mapperLocations: classpath:com/turtle/sudoku/entity/*.xml
-redis.expireTime: 3600
+redis.expireTime: 25200
 url:
   turtlebone-core: http://127.0.0.1/core
